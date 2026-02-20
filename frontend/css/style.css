@@ -1,0 +1,25 @@
+body {
+    font-family: Arial;
+    text-align: center;
+    background-color: #f5f5f5;
+}
+
+.menu a {
+    margin: 10px;
+    padding: 10px;
+    background: gold;
+    text-decoration: none;
+    color: black;
+}
+
+input {
+    margin: 10px;
+    padding: 8px;
+}
+
+button {
+    padding: 8px 15px;
+    background: orange;
+    border: none;
+    cursor: pointer;
+}
