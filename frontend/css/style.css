@@ -23,3 +23,15 @@ button {
     border: none;
     cursor: pointer;
 }
+
+#timerBox {
+    font-size: 20px;
+    margin: 15px;
+    font-weight: bold;
+    color: darkred;
+}
+
+#gameOver {
+    margin-top: 20px;
+    color: red;
+}

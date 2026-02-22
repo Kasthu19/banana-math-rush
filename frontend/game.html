@@ -10,6 +10,10 @@
 
     <h2>Banana Challenge</h2>
 
+    <div id="timerBox">
+    ⏱ Time Left: <span id="timer">15</span> seconds
+    </div>
+
     <div id="gameArea">
         <img id="bananaImage" src="" alt="Puzzle">
         <input type="number" id="answer" placeholder="Your Answer">
@@ -17,6 +21,15 @@
     </div>
 
     <p>Score: <span id="score">0</span></p>
+    <p>Level: <span id="level">1</span></p>
+    <p>Lives: <span id="livesDisplay">❤️❤️❤️</span></p>
+    <p>Combo: <span id="combo">0</span></p>
+    <p>Multiplier: <span id="multiplier">x1</span></p>
+
+    <div id="gameOver" style="display:none;">
+    <h3>Game Over!</h3>
+    <button onclick="restartGame()">Restart</button>
+    </div>
 
     <button id="logoutBtn">Logout</button>
 
