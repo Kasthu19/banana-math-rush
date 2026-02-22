@@ -31,6 +31,33 @@ button {
     color: darkred;
 }
 
+.elite-mode {
+    color: #ff0000;
+    text-shadow: 0 0 10px #ff0000;
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.1);
+    }
+}
+
+nav {
+    margin: 20px 0;
+}
+
+nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+}
+
 #gameOver {
     margin-top: 20px;
     color: red;

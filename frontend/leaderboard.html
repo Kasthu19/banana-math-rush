@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Leaderboard - Banana Game</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: gold;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>🏆 Global Leaderboard</h2>
+    <nav>
+        <a href="game.html">Back to Game</a> |
+        <a href="index.html">Home</a>
+    </nav>
+
+    <table id="leaderboardTable">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Username</th>
+                <th>High Score</th>
+                <th>Max Level</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be loaded here -->
+        </tbody>
+    </table>
+
+    <script src="js/api.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchLeaderboard().then(data => {
+                const tbody = document.querySelector("#leaderboardTable tbody");
+                data.forEach((row, index) => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${row.username}</td>
+                        <td>${row.high_score}</td>
+                        <td>${row.max_level}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
