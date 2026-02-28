@@ -1,61 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Leaderboard - Banana Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Rankings - Banana Math Rush</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        table {
-            margin: 20px auto;
-            border-collapse: collapse;
-            width: 80%;
+        .leaderboard-card {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 2rem;
         }
 
-        th,
-        td {
-            padding: 10px;
-            border: 1px solid #ddd;
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.75rem;
+            margin-top: 1rem;
         }
 
         th {
-            background: gold;
+            text-align: left;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 1.25rem 1rem;
+            background: var(--bg-yellow);
+            transition: var(--transition);
+        }
+
+        tr td:first-child {
+            border-radius: 1rem 0 0 1rem;
+            font-weight: 800;
+            color: var(--primary-orange-hover);
+        }
+
+        tr td:last-child {
+            border-radius: 0 1rem 1rem 0;
+        }
+
+        tr:nth-child(1) td {
+            background: #fef9c3;
+            border: 2px solid #fde047;
+        }
+
+        tr:nth-child(2) td {
+            background: #f1f5f9;
+        }
+
+        tr:nth-child(3) td {
+            background: #fff7ed;
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            width: 2.5rem;
+            height: 2.5rem;
+            align-items: center;
+            justify-content: center;
+            background: var(--white);
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
 
 <body>
-    <h2>🏆 Global Leaderboard</h2>
+    <div class="bg-floating">
+        <span class="floating-icon" style="top: 15%; left: 5%;">🏆</span>
+        <span class="floating-icon" style="top: 45%; left: 90%;">👑</span>
+    </div>
+
     <nav>
-        <a href="game.html">Back to Game</a> |
-        <a href="index.html">Home</a>
+        <a href="index.html">Dashboard</a>
+        <a href="game.html">Play Game</a>
+        <a href="achievements.html">Badges</a>
     </nav>
 
-    <table id="leaderboardTable">
-        <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Username</th>
-                <th>High Score</th>
-                <th>Max Level</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Data will be loaded here -->
-        </tbody>
-    </table>
+    <div class="card leaderboard-card">
+        <span class="card-icon">👑</span>
+        <h1>Global Rankings</h1>
+        <p class="text-muted">The top 10 banana catchers in the world!</p>
+
+        <table id="leaderboardTable">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Catcher</th>
+                    <th>Score</th>
+                    <th>Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be loaded here -->
+            </tbody>
+        </table>
+    </div>
 
     <script src="js/api.js"></script>
     <script>
+        // Check authentication
+        if (!localStorage.getItem('username')) {
+            window.location.href = 'login.html';
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             fetchLeaderboard().then(data => {
                 const tbody = document.querySelector("#leaderboardTable tbody");
                 data.forEach((row, index) => {
                     const tr = document.createElement("tr");
+                    const rankEmoji = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "";
                     tr.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${row.username}</td>
-                        <td>${row.high_score}</td>
-                        <td>${row.max_level}</td>
+                        <td>
+                            <div class="rank-badge">${rankEmoji || (index + 1)}</div>
+                        </td>
+                        <td style="font-weight: 600;">${row.username}</td>
+                        <td style="font-weight: 800;">${row.high_score.toLocaleString()}</td>
+                        <td><span class="btn" style="padding: 0.25rem 0.75rem; font-size: 0.8rem; width: auto;">Lvl ${row.max_level}</span></td>
                     `;
                     tbody.appendChild(tr);
                 });

@@ -1,49 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Achievements - Banana Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements - Banana Math Rush</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
         .achievement-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            padding: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 1000px;
+            margin-top: 2rem;
         }
 
         .achievement-card {
-            border: 2px solid #ddd;
-            padding: 15px;
-            border-radius: 10px;
-            background: #fff;
-            opacity: 0.5;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            transition: var(--transition);
+            opacity: 0.6;
+            filter: grayscale(1);
+            position: relative;
+            overflow: hidden;
         }
 
         .achievement-card.earned {
-            border-color: gold;
             opacity: 1;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            filter: grayscale(0);
+            border: 3px solid var(--primary-orange);
+        }
+
+        .achievement-card.earned::after {
+            content: 'EARNED';
+            position: absolute;
+            top: 1rem;
+            right: -2rem;
+            background: var(--primary-orange);
+            color: var(--text-dark);
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 0.25rem 2rem;
+            transform: rotate(45deg);
         }
 
         .achievement-card h3 {
-            font-size: 1.1em;
-            margin: 10px 0;
+            font-size: 1.125rem;
+            margin: 1rem 0 0.5rem;
         }
 
         .achievement-card p {
-            font-size: 0.9em;
-            color: #666;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .lock-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
 
 <body>
-    <h2>🧩 Achievement Badges</h2>
+    <div class="bg-floating">
+        <span class="floating-icon" style="top: 10%; left: 10%;">✨</span>
+        <span class="floating-icon" style="top: 30%; left: 85%;">🍌</span>
+        <span class="floating-icon" style="top: 70%; left: 15%;">🐒</span>
+    </div>
+
     <nav>
-        <a href="game.html">Back to Game</a> |
-        <a href="index.html">Home</a>
+        <a href="index.html">Dashboard</a>
+        <a href="game.html">Play Game</a>
+        <a href="leaderboard.html">Rankings</a>
     </nav>
+
+    <div class="hero">
+        <h1>Your Achievements</h1>
+        <p>Unlock all badges to become the Ultimate Banana Master! 🐒✨</p>
+    </div>
 
     <div class="achievement-grid" id="achievementsGrid">
         <!-- Achievements will be loaded here -->
@@ -51,14 +89,23 @@
 
     <script src="js/api.js"></script>
     <script>
+        // Check authentication
+        if (!localStorage.getItem('username')) {
+            window.location.href = 'login.html';
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             fetchAchievements().then(data => {
                 const grid = document.getElementById("achievementsGrid");
+                // Fallback for demo if no data
+                if (!data || data.length === 0) {
+                    grid.innerHTML = '<p class="text-muted">Loading your amazing progress...</p>';
+                }
                 data.forEach(achievement => {
                     const div = document.createElement("div");
                     div.className = `achievement-card ${achievement.earned ? 'earned' : ''}`;
                     div.innerHTML = `
-                        <div style="font-size: 3em;">${achievement.earned ? '🏆' : '🔒'}</div>
+                        <div class="lock-icon">${achievement.earned ? '🏆' : '🔒'}</div>
                         <h3>${achievement.name}</h3>
                         <p>${achievement.description}</p>
                     `;

@@ -1,22 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Back! - Banana Math Rush</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+    <div class="bg-floating">
+        <span class="floating-icon" style="top: 10%; left: 5%;">🍌</span>
+        <span class="floating-icon" style="top: 30%; left: 80%;">🐒</span>
+        <span class="floating-icon" style="top: 70%; left: 15%;">🌴</span>
+        <span class="floating-icon" style="top: 85%; left: 75%;">🍌</span>
+    </div>
 
-    <h2>Login</h2>
+    <div class="auth-container">
+        <span class="auth-icon">🔑</span>
+        <h1>Welcome Back!</h1>
+        <p class="text-muted">Type your info to keep catching bananas!</p>
 
-    <form id="loginForm">
-        <input type="text" id="username" placeholder="Username" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button type="submit">Login</button>
-    </form>
+        <p id="message"></p>
 
-    <p id="message"></p>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="naduni" required autofocus>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="••••••" required>
+            </div>
+            <button type="submit">Login 🚀</button>
+        </form>
+
+        <p class="mt-4 text-muted">Don't have an account? <a href="register.html"
+                style="color: var(--primary-orange-hover); font-weight: 800; text-decoration: underline;">Sign up now!
+                🚀</a></p>
+    </div>
 
     <script src="js/auth.js"></script>
 </body>

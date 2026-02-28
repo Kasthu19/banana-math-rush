@@ -1,24 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Banana Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banana Catcher Adventure</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-
-    <h1>🍌 Banana Puzzle Game</h1>
-
-    <div class="menu">
-        <a href="game.html">Start Game</a>
-        <a href="leaderboard.html">Leaderboard</a>
-        <a href="achievements.html">Achievements</a>
-        <br><br>
-        <a href="login.html">Login</a>
-        <a href="register.html">Register</a>
+    <div class="bg-floating">
+        <span class="floating-icon" style="top: 5%; left: 15%;">🍌</span>
+        <span class="floating-icon" style="top: 25%; left: 80%;">🐒</span>
+        <span class="floating-icon" style="top: 65%; left: 5%;">🌴</span>
+        <span class="floating-icon" style="top: 80%; left: 90%;">🍌</span>
     </div>
 
+    <div class="hero">
+        <h1>Banana Catcher Adventure</h1>
+        <p id="welcomeUser">Ready to start the ultimate puzzle journey? 🚀</p>
+    </div>
+
+    <div class="card-grid">
+        <div class="card">
+            <span class="card-icon">🎮</span>
+            <h2>Play Now</h2>
+            <p class="text-muted mb-2">Jump right into the banana-catching fun!</p>
+            <a href="game.html" class="btn">Start Playing ⚡</a>
+        </div>
+
+        <div class="card">
+            <span class="card-icon">🏆</span>
+            <h2>Leaderboard</h2>
+            <p class="text-muted mb-2">See who's the ultimate banana champion!</p>
+            <a href="leaderboard.html" class="btn">View Rankings 👑</a>
+        </div>
+
+        <div class="card">
+            <span class="card-icon">📊</span>
+            <h2>Logout</h2>
+            <p class="text-muted mb-2">Done for now? See you back soon!</p>
+            <button id="logoutBtn" class="btn">Logout 👋</button>
+        </div>
+    </div>
+
+    <div class="card mt-4" style="width: 100%; max-width: 1100px; text-align: left; align-items: start;">
+        <h2>How to Play</h2>
+        <div class="card-grid" style="margin-top: 1rem; grid-template-columns: repeat(3, 1fr);">
+            <div style="text-align: center;">
+                <h3 style="color: var(--primary-orange);">1</h3>
+                <p>Choose your difficulty level</p>
+                <span style="font-size: 1.5rem;">🌴</span>
+            </div>
+            <div style="text-align: center;">
+                <h3 style="color: var(--primary-orange);">2</h3>
+                <p>Catch falling bananas</p>
+                <span style="font-size: 1.5rem;">🍌</span>
+            </div>
+            <div style="text-align: center;">
+                <h3 style="color: var(--primary-orange);">3</h3>
+                <p>Avoid obstacles</p>
+                <span style="font-size: 1.5rem;">💥</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        // Check authentication
+        const user = localStorage.getItem('username');
+        if (user) {
+            document.getElementById('welcomeUser').textContent = `Hello ${user}! Ready to play? 🐒`;
+        } else {
+            // Redirect to login if no user found
+            window.location.href = 'login.html';
+        }
+
+        document.getElementById('logoutBtn')?.addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        });
+    </script>
 </body>
 
 </html>

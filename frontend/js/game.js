@@ -1,3 +1,8 @@
+// Check authentication
+if (!localStorage.getItem('username')) {
+    window.location.href = 'login.html';
+}
+
 let score = 0;
 let lives = 3;
 let combo = 0;

@@ -1,47 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Banana Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banana Challenge - Play</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-
-    <h2>Banana Challenge</h2>
+    <div class="bg-floating">
+        <span class="floating-icon" style="top: 10%; left: 5%;">🍌</span>
+        <span class="floating-icon" style="top: 40%; left: 95%;">🐒</span>
+    </div>
 
     <nav>
-        <a href="index.html">Home</a> |
-        <a href="leaderboard.html">Leaderboard</a> |
-        <a href="achievements.html">Achievements</a>
+        <a href="index.html">Dashboard</a>
+        <a href="leaderboard.html">Rankings</a>
+        <a href="achievements.html">Badges</a>
     </nav>
 
     <div id="timerBox">
-        ⏱ Time Left: <span id="timer">15</span> seconds
+        <span style="font-size: 1.5rem;">⏱️</span>
+        Time Left: <span id="timer">15</span>s
     </div>
 
     <div id="gameArea">
-        <img id="bananaImage" src="" alt="Puzzle">
-        <input type="number" id="answer" placeholder="Your Answer">
-        <button id="submitAnswer">Submit</button>
+        <img id="bananaImage" src="" alt="Puzzle Loading...">
+        <div class="form-group" style="margin-top: 1rem;">
+            <input type="number" id="answer" placeholder="Your Answer 🍌" autofocus>
+        </div>
+        <button id="submitAnswer" class="btn mt-4">Submit Answer 🎯</button>
     </div>
 
-    <p>Score: <span id="score">0</span></p>
-    <p>Level: <span id="level">1</span></p>
-    <p>Lives: <span id="livesDisplay">❤️❤️❤️</span></p>
-    <p>Combo: <span id="combo">0</span></p>
-    <p>Multiplier: <span id="multiplier">x1</span></p>
-
-    <div id="gameOver" style="display:none;">
-        <h3>Game Over!</h3>
-        <button onclick="restartGame()">Restart</button>
+    <div class="stats-grid">
+        <div class="stat-box">
+            <span class="label">Total Score</span>
+            <span id="score" class="value">0</span>
+        </div>
+        <div class="stat-box">
+            <span class="label">Current Level</span>
+            <span id="level" class="value">1</span>
+        </div>
+        <div class="stat-box">
+            <span class="label">Lives Left</span>
+            <span id="livesDisplay" class="value" style="font-size: 1rem;">❤️❤️❤️</span>
+        </div>
     </div>
 
-    <button id="logoutBtn">Logout</button>
+    <div class="stats-grid">
+        <div class="stat-box">
+            <span class="label">Combo</span>
+            <span id="combo" class="value">0</span>
+        </div>
+        <div class="stat-box">
+            <span class="label">Multiplier</span>
+            <span id="multiplier" class="value">x1</span>
+        </div>
+        <div class="stat-box" id="eliteBadge" style="display: none; background: #fee2e2;">
+            <span class="label">Mode</span>
+            <span class="value elite-mode">ELITE</span>
+        </div>
+    </div>
+
+    <div id="gameOver" class="auth-container"
+        style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100;">
+        <span class="auth-icon">🏁</span>
+        <h2>Game Over!</h2>
+        <p class="text-muted">Final Score: <span id="finalScoreDisplay">0</span></p>
+        <button onclick="location.reload()" class="btn mt-4">Play Again 🔄</button>
+    </div>
 
     <script src="js/api.js"></script>
     <script src="js/game.js"></script>
-
 </body>
 
 </html>
