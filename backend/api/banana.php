@@ -4,7 +4,7 @@
 header('Content-Type: application/json');
 
 // Fetching from the provided Banana API proxy URL
-$external_url = "https://martin.itools.com.my/uob/banana/api.php";
+$external_url = "https://marcconrad.com/uob/banana/api.php";
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $external_url);

@@ -349,3 +349,246 @@ nav a.active {
     opacity: 0.1;
     font-size: 2rem;
 }
+
+/* Success Feedback Animation */
+.success-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 2rem;
+    box-shadow: 0 0 50px rgba(251, 191, 36, 0.5);
+    z-index: 1000;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.success-overlay.active {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+.success-overlay .emoji {
+    font-size: 5rem;
+    animation: celebrate 0.5s ease-in-out infinite alternate;
+}
+
+.success-overlay .text {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--success-text);
+}
+
+@keyframes celebrate {
+    from {
+        transform: rotate(-10deg) scale(1);
+    }
+
+    to {
+        transform: rotate(10deg) scale(1.2);
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+.shake {
+    animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--primary-orange);
+    z-index: 999;
+}
+
+/* Level Up Feedback */
+.level-up-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    padding: 3rem 4rem;
+    border-radius: 3rem;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.2);
+    z-index: 1100;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    color: white;
+    text-align: center;
+}
+
+.level-up-overlay.active {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+.level-up-overlay .level-icon {
+    font-size: 6rem;
+    animation: bounce 0.6s infinite alternate;
+}
+
+.level-up-overlay .level-text {
+    font-size: 2.5rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+.level-up-overlay .new-level-display {
+    font-size: 1.5rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 2rem;
+    border-radius: 2rem;
+}
+
+/* Themes for Levels */
+body.level-2 {
+    background-color: #f0fdf4 !important;
+    /* Light green jungle theme */
+    --bg-yellow: #f0fdf4;
+    --bg-yellow-mid: #dcfce7;
+}
+
+body.level-3 {
+    background-color: #eff6ff !important;
+    /* Light blue sky theme */
+    --bg-yellow: #eff6ff;
+    --bg-yellow-mid: #dbeafe;
+}
+
+/* Level Complete Overlay */
+.level-complete-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: white;
+    padding: 4rem;
+    border-radius: 3rem;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.4);
+    z-index: 1200;
+    text-align: center;
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 5px solid var(--primary-orange);
+}
+
+.level-complete-overlay.active {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+.monkey-dance {
+    font-size: 8rem;
+    animation: monkeyDance 1.2s infinite alternate ease-in-out;
+    margin-bottom: 2rem;
+}
+
+.celebrate-text {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--primary-orange-hover);
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes monkeyDance {
+    0% {
+        transform: scale(1) rotate(-10deg) translateY(0);
+    }
+
+    50% {
+        transform: scale(1.1) rotate(10deg) translateY(-20px);
+    }
+
+    100% {
+        transform: scale(1) rotate(-10deg) translateY(0);
+    }
+}
+
+/* Achievement Click Interaction */
+.achievement-card.unlocked-ready {
+    cursor: pointer;
+    animation: pulseUnlocked 2s infinite;
+    filter: none;
+    opacity: 1;
+    border: 3px dashed var(--primary-orange);
+}
+
+@keyframes pulseUnlocked {
+    0% {
+        box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 20px rgba(251, 191, 36, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(251, 191, 36, 0);
+    }
+}
+
+.lock-breaking {
+    animation: breakLock 0.5s forwards;
+}
+
+@keyframes breakLock {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.5) rotate(15deg);
+        color: #ef4444;
+    }
+
+    100% {
+        transform: scale(1) rotate(0);
+        opacity: 0;
+        display: none;
+    }
+}
+
+body.level-elite {
+    background-color: #fff1f2 !important;
+    /* Light red fire theme */
+    --bg-yellow: #fff1f2;
+    --bg-yellow-mid: #ffe4e6;
+}

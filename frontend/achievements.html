@@ -95,22 +95,50 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            fetchAchievements().then(data => {
-                const grid = document.getElementById("achievementsGrid");
-                // Fallback for demo if no data
-                if (!data || data.length === 0) {
-                    grid.innerHTML = '<p class="text-muted">Loading your amazing progress...</p>';
+            const grid = document.getElementById("achievementsGrid");
+            const level1Done = localStorage.getItem('level1_done') === 'true';
+
+            // Define our Badges/Levels
+            const levels = [
+                { id: 1, name: 'Trainee', desc: 'Finish Level 1', condition: 0, earned: true }, // Level 1 is always unlocked
+                { id: 2, name: 'Beginner', desc: 'Reach level 2', condition: 'level1_done', icon: '🔒' },
+                { id: 3, name: 'Intermediate', desc: 'Reach level 3', condition: 10, icon: '🔒' },
+                { id: 4, name: 'Elite', desc: 'Reach level 5', condition: 35, icon: '🔒' },
+                { id: 5, name: 'Banana Master', desc: 'Score over 50', condition: 50, icon: '🔒' }
+            ];
+
+            grid.innerHTML = '';
+            levels.forEach(lvl => {
+                const card = document.createElement("div");
+                let isUnlocked = lvl.earned || (lvl.id === 2 && level1Done);
+
+                card.className = `achievement-card ${isUnlocked ? 'earned' : ''}`;
+                if (lvl.id === 2 && level1Done) {
+                    card.classList.add('unlocked-ready');
+                    card.title = "Click to Unlock Level 2!";
                 }
-                data.forEach(achievement => {
-                    const div = document.createElement("div");
-                    div.className = `achievement-card ${achievement.earned ? 'earned' : ''}`;
-                    div.innerHTML = `
-                        <div class="lock-icon">${achievement.earned ? '🏆' : '🔒'}</div>
-                        <h3>${achievement.name}</h3>
-                        <p>${achievement.description}</p>
-                    `;
-                    grid.appendChild(div);
-                });
+
+                card.innerHTML = `
+                    <div class="lock-icon" id="lock-${lvl.id}">${isUnlocked ? '🌟' : '🔒'}</div>
+                    <h3>${lvl.name}</h3>
+                    <p>${lvl.desc}</p>
+                `;
+
+                card.onclick = () => {
+                    if (lvl.id === 2 && level1Done) {
+                        const lock = document.getElementById(`lock-${lvl.id}`);
+                        lock.innerText = '🔓';
+                        lock.classList.add('lock-breaking');
+                        setTimeout(() => {
+                            window.location.href = 'game.html?level=2';
+                        }, 800);
+                    } else if (lvl.earned || (lvl.id === 1)) {
+                        window.location.href = 'game.html?level=1';
+                    } else {
+                        alert("Finish the previous level to unlock this! 🐒");
+                    }
+                };
+                grid.appendChild(card);
             });
         });
     </script>

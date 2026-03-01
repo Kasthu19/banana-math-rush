@@ -71,6 +71,27 @@
         <button onclick="location.reload()" class="btn mt-4">Play Again 🔄</button>
     </div>
 
+    <!-- Success Feedback Overlay -->
+    <div id="successOverlay" class="success-overlay">
+        <div class="emoji">🐒👏</div>
+        <div class="text">CORRECT!</div>
+    </div>
+
+    <!-- Level Up Overlay -->
+    <div id="levelUpOverlay" class="level-up-overlay">
+        <div class="level-icon">🚀</div>
+        <div class="level-text">LEVEL UP!</div>
+        <div class="new-level-display">Level <span id="nextLevelNum">2</span></div>
+    </div>
+
+    <!-- Level Complete Overlay -->
+    <div id="levelCompleteOverlay" class="level-complete-overlay">
+        <div class="monkey-dance">🐒🕺</div>
+        <div class="celebrate-text">LEVEL 1 FINISHED!</div>
+        <p>You caught all the bananas! 🍌</p>
+        <button onclick="window.location.href='achievements.html'" class="btn mt-4">Go to Unlock Level 2 🔓</button>
+    </div>
+
     <script src="js/api.js"></script>
     <script src="js/game.js"></script>
 </body>

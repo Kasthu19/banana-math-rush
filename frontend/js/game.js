@@ -15,6 +15,7 @@ let currentQuestionId = null;
 let analytics = [];
 let totalResponseTime = 0;
 let questionsAnswered = 0;
+let currentActiveLevel = 1; // Default
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -29,8 +30,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function startGame() {
+    const urlParams = new URLSearchParams(window.location.search);
+    currentActiveLevel = parseInt(urlParams.get('level')) || 1;
 
-    score = 0;
+    // Set progression state based on level
+    if (currentActiveLevel === 2) score = 5;
+    else if (currentActiveLevel === 3) score = 10;
+    else if (currentActiveLevel === 4) score = 20;
+    else score = 0;
+
     lives = 3;
     combo = 0;
     multiplier = 1;
@@ -39,9 +47,15 @@ function startGame() {
     questionsAnswered = 0;
 
     document.getElementById("score").innerText = score;
-    document.getElementById("level").innerText = 1;
+    document.getElementById("finalScoreDisplay").innerText = score;
+    document.getElementById("level").innerText = currentActiveLevel;
     document.getElementById("combo").innerText = combo;
     document.getElementById("multiplier").innerText = "x1";
+
+    // Show monkey on start if Level 2+
+    if (currentActiveLevel >= 2) {
+        setTimeout(() => showLevelUpFeedback(currentActiveLevel), 800);
+    }
 
     updateLivesDisplay();
 
@@ -68,35 +82,28 @@ function loadPuzzle() {
 }
 
 function resetTimer() {
-
-    let level = 1;
+    let level = currentActiveLevel;
     let timerValue = 15;
 
-    // Difficulty scaling
-    if (score >= 5) {
-        timerValue = 12;
-        level = 2;
-    }
-    if (score >= 10) {
-        timerValue = 10;
-        level = 3;
-    }
-    if (score >= 20) {
-        timerValue = 7;
-        level = 4;
-    }
-    // Elite Level
-    if (score >= 35) {
-        timerValue = 5;
-        level = "Elite 🏆";
-        document.getElementById("level").classList.add("elite-mode");
-    } else {
-        document.getElementById("level").classList.remove("elite-mode");
-    }
+    // Highest reached logic
+    if (score >= 35 || currentActiveLevel >= 5) { timerValue = 5; level = "Elite 🏆"; }
+    else if (score >= 20 || currentActiveLevel >= 4) { timerValue = 7; level = 4; }
+    else if (score >= 10 || currentActiveLevel >= 3) { timerValue = 10; level = 3; }
+    else if (score >= 5 || currentActiveLevel >= 2) { timerValue = 12; level = 2; }
+    else { timerValue = 15; level = 1; }
 
     timer = timerValue;
     document.getElementById("level").innerText = level;
     document.getElementById("timer").innerText = timer;
+
+    // Apply Theme and Elite styles
+    document.body.className = `level-${level === "Elite 🏆" ? 'elite' : level}`;
+
+    if (level === "Elite 🏆") {
+        document.getElementById("level").classList.add("elite-mode");
+    } else {
+        document.getElementById("level").classList.remove("elite-mode");
+    }
 
     if (countdown !== null) {
         clearInterval(countdown);
@@ -106,6 +113,15 @@ function resetTimer() {
 
         timer--;
         document.getElementById("timer").innerText = timer;
+
+        // Pulse timer when low
+        if (timer <= 5) {
+            document.getElementById("timerBox").style.transform = "scale(1.1)";
+            document.getElementById("timer").style.color = "#ef4444";
+        } else {
+            document.getElementById("timerBox").style.transform = "scale(1)";
+            document.getElementById("timer").style.color = "#e11d48";
+        }
 
         if (timer <= 0) {
             handleTimeUp();
@@ -162,6 +178,15 @@ function checkAnswer() {
         totalResponseTime += responseTime;
 
         document.getElementById("score").innerText = score;
+        document.getElementById("finalScoreDisplay").innerText = score;
+
+        // Level 1 Finish Logic
+        if (currentActiveLevel === 1 && score === 5) {
+            clearInterval(countdown);
+            localStorage.setItem('level1_done', 'true');
+            setTimeout(showLevel1Complete, 500);
+            return; // Stop loading next puzzle automatically
+        }
 
         // Bonus for speed
         if (responseTime < 3) {
@@ -175,7 +200,14 @@ function checkAnswer() {
         document.getElementById("combo").innerText = combo;
         document.getElementById("multiplier").innerText = `x${multiplier}`;
 
-        loadPuzzle();
+        showSuccessFeedback();
+
+        // Level Jump Detection
+        if (score === 5 || score === 10 || score === 20 || score === 35) {
+            setTimeout(() => showLevelUpFeedback(score === 5 ? 2 : score === 10 ? 3 : score === 20 ? 4 : 'Elite'), 500);
+        }
+
+        setTimeout(loadPuzzle, 1500); // Wait for animations before loading next puzzle
 
     } else {
         lives--;
@@ -205,6 +237,9 @@ function endGame() {
     document.getElementById("gameOver").style.display = "block";
     document.getElementById("submitAnswer").disabled = true;
 
+    // Fix: Show the final score in the Game Over message
+    document.getElementById("finalScoreDisplay").innerText = score;
+
     const avgResponseTime = questionsAnswered > 0 ? (totalResponseTime / questionsAnswered).toFixed(2) : 0;
 
     saveScore({
@@ -218,5 +253,77 @@ function endGame() {
 }
 
 function restartGame() {
-    startGame();
+    location.reload();
+}
+
+function showSuccessFeedback() {
+    const overlay = document.getElementById("successOverlay");
+    overlay.classList.add("active");
+
+    // Random emojis
+    const smiles = ["👏", "🐒", "🍌", "🔥", "✨", "🌟"];
+    overlay.querySelector(".emoji").innerText = "🐒" + smiles[Math.floor(Math.random() * smiles.length)];
+
+    for (let i = 0; i < 30; i++) {
+        createConfetti();
+    }
+
+    setTimeout(() => {
+        overlay.classList.remove("active");
+    }, 800);
+}
+
+function createConfetti() {
+    const confetti = document.createElement("div");
+    confetti.className = "confetti";
+    document.body.appendChild(confetti);
+
+    const colors = ["#fbbf24", "#f59e0b", "#f97316", "#ffffff"];
+    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+    const startX = Math.random() * window.innerWidth;
+    const startY = -10;
+
+    confetti.style.left = startX + "px";
+    confetti.style.top = startY + "px";
+    confetti.style.borderRadius = "50%";
+
+    const animation = confetti.animate([
+        { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+        { transform: `translate(${(Math.random() - 0.5) * 200}px, ${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+    ], {
+        duration: Math.random() * 1000 + 1000,
+        easing: "cubic-bezier(0.25, 0.46, 0.45, 0.94)"
+    });
+
+    animation.onfinish = () => confetti.remove();
+}
+
+function showLevelUpFeedback(level) {
+    const overlay = document.getElementById("levelUpOverlay");
+    const levelNum = document.getElementById("nextLevelNum");
+
+    levelNum.innerText = level;
+    overlay.classList.add("active");
+    document.getElementById("gameArea").classList.add("shake");
+
+    // Extra confetti for level up
+    for (let i = 0; i < 100; i++) {
+        setTimeout(createConfetti, i * 10);
+    }
+
+    setTimeout(() => {
+        overlay.classList.remove("active");
+        document.getElementById("gameArea").classList.remove("shake");
+    }, 2500);
+}
+
+function showLevel1Complete() {
+    const overlay = document.getElementById("levelCompleteOverlay");
+    overlay.classList.add("active");
+
+    // Massive confetti
+    for (let i = 0; i < 150; i++) {
+        setTimeout(createConfetti, i * 15);
+    }
 }
