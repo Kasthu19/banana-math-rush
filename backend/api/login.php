@@ -1,8 +1,13 @@
 <?php
+session_start();
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
 require_once '../db.php';
+
+error_log("Login Request: " . $_SERVER['REQUEST_METHOD'] . " User: " . ($_POST['username'] ?? 'unknown'));
+error_log("Session ID (Pre): " . session_id());
+error_log("Session Data (Pre): " . print_r($_SESSION, true));
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
@@ -14,7 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password_hash'])) {
-            echo json_encode(["status" => "success", "message" => "Login successful", "username" => $user['username']]);
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+
+            error_log("Session set for: " . $user['username'] . " (ID: " . $user['id'] . ") Session ID: " . session_id());
+
+            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Session set for: " . $user['username'] . " (ID: " . $user['id'] . ")\n", FILE_APPEND);
+
+            echo json_encode([
+                "status" => "success",
+                "message" => "Login successful",
+                "username" => $user['username'],
+                "user_id" => $user['id']
+            ]);
         } else {
             echo json_encode(["status" => "error", "message" => "Invalid username or password"]);
         }

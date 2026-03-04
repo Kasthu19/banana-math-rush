@@ -4,6 +4,11 @@
 require_once '../db.php';
 header('Content-Type: application/json');
 
+session_start();
+error_log("Score Save Request: " . $_SERVER['REQUEST_METHOD'] . " Session ID: " . session_id());
+error_log("Session Data: " . print_r($_SESSION, true));
+error_log("POST Data: " . print_r($_POST, true));
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(["status" => "error", "message" => "Method Not Allowed"]);
@@ -11,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Basic anti-cheat: rate limiting (simple session-based)
-session_start();
 $now = time();
 if (isset($_SESSION['last_submission']) && ($now - $_SESSION['last_submission'] < 2)) {
     http_response_code(429);
@@ -21,7 +25,12 @@ if (isset($_SESSION['last_submission']) && ($now - $_SESSION['last_submission'] 
 $_SESSION['last_submission'] = $now;
 
 // In a real app, user_id would come from session
-$user_id = $_SESSION['user_id'] ?? 1;
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(["status" => "error", "message" => "User not authenticated"]);
+    exit;
+}
+$user_id = $_SESSION['user_id'];
 
 $score = filter_input(INPUT_POST, 'score', FILTER_SANITIZE_NUMBER_INT);
 $level = filter_input(INPUT_POST, 'level', FILTER_SANITIZE_NUMBER_INT) ?? 1;
