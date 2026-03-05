@@ -14,6 +14,19 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+[data-theme='dark'] {
+    --bg-yellow: #0f172a;
+    --bg-yellow-mid: #1e293b;
+    --primary-orange: #fbbf24;
+    --primary-orange-hover: #f59e0b;
+    --text-dark: #f8fafc;
+    --text-muted: #94a3b8;
+    --white: #1e293b;
+    --success-green: #064e3b;
+    --success-text: #d1fae5;
+    --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -97,6 +110,7 @@ input {
     border: 2px solid var(--bg-yellow-mid);
     border-radius: 1rem;
     background: var(--bg-yellow);
+    color: var(--text-dark);
     font-family: inherit;
     font-size: 1rem;
     transition: var(--transition);
@@ -214,6 +228,35 @@ nav a.active {
 .hero p {
     color: var(--bg-yellow);
     font-weight: 600;
+}
+
+.btn-theme {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+}
+
+.btn-theme:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(30deg);
+}
+
+[data-theme='dark'] .btn-theme {
+    background: rgba(0, 0, 0, 0.2);
 }
 
 /* Utilities */
@@ -591,4 +634,88 @@ body.level-elite {
     /* Light red fire theme */
     --bg-yellow: #fff1f2;
     --bg-yellow-mid: #ffe4e6;
+}
+
+/* Profile & Achievements Styles */
+.badge-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.achievement-badge {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-yellow);
+    padding: 1rem;
+    border-radius: 1.25rem;
+    border: 2px solid var(--bg-yellow-mid);
+    transition: var(--transition);
+}
+
+.achievement-badge:hover {
+    transform: scale(1.02);
+    border-color: var(--primary-orange);
+}
+
+.badge-icon {
+    font-size: 2rem;
+    background: var(--white);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.badge-info h4 {
+    margin-bottom: 0.1rem;
+    font-size: 1rem;
+}
+
+.badge-info small {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.leaderboard-table th {
+    text-align: left;
+    padding: 1rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--bg-yellow-mid);
+}
+
+.leaderboard-table td {
+    padding: 1rem;
+    font-weight: 600;
+}
+
+.leaderboard-table tr:not(:last-child) td {
+    border-bottom: 1px solid var(--bg-yellow-mid);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--white);
+    color: var(--white);
+    padding: 0.75rem 1.5rem;
+    border-radius: 1rem;
+    text-decoration: none;
+    font-weight: 800;
+    transition: var(--transition);
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.btn-outline:hover {
+    background: var(--white);
+    color: var(--primary-orange-hover);
 }

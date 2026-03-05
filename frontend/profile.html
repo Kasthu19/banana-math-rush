@@ -1,20 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Profile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Banana Catcher</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+    <div class="bg-floating">
+        <span class="floating-icon" style="top: 10%; left: 5%;">🍌</span>
+        <span class="floating-icon" style="top: 30%; left: 90%;">🏆</span>
+        <span class="floating-icon" style="top: 70%; left: 15%;">🐒</span>
+    </div>
 
-    <h2>Your Statistics</h2>
+    <div class="hero">
+        <button id="themeToggle" class="btn-theme" title="Toggle Dark Mode">🌓</button>
+        <h1 id="profileUsername">Athlete's Profile</h1>
+        <p>Your journey and milestones so far 🌟</p>
+        <a href="index.html" class="btn-outline">Back to Home 🏠</a>
+    </div>
 
-    <div id="stats"></div>
+    <div class="card-grid" id="statsGrid">
+        <div class="card">
+            <span class="card-icon">🎮</span>
+            <h3 id="statTotalGames">0</h3>
+            <p>Games Played</p>
+        </div>
+        <div class="card">
+            <span class="card-icon">🥇</span>
+            <h3 id="statHighScore">0</h3>
+            <p>High Score</p>
+        </div>
+        <div class="card">
+            <span class="card-icon">⚡</span>
+            <h3 id="statAvgSpeed">0s</h3>
+            <p>Avg Speed</p>
+        </div>
+        <div class="card">
+            <span class="card-icon">🌠</span>
+            <h3 id="statMaxLevel">0</h3>
+            <p>Max Level</p>
+        </div>
+    </div>
 
-    <a href="game.html">Back to Game</a>
+    <div class="card-grid mt-4" style="grid-template-columns: 2fr 1fr;">
+        <!-- Recent History -->
+        <div class="card" style="text-align: left; align-items: start;">
+            <h2>Recent Match History</h2>
+            <div style="width: 100%; overflow-x: auto;">
+                <table class="leaderboard-table" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Score</th>
+                            <th>Level</th>
+                            <th>Avg Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentHistoryBody">
+                        <!-- Rows will be added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
+        <!-- Achievements -->
+        <div class="card" style="text-align: left; align-items: start;">
+            <h2>Achievements 🏆</h2>
+            <div id="achievementsContainer" class="badge-container">
+                <!-- Badges will be added here -->
+                <p id="noAchievementsMsg" class="text-muted">No achievements yet. Keep playing!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/theme.js"></script>
     <script src="js/profile.js"></script>
+    <script>
+        document.getElementById('themeToggle')?.addEventListener('click', () => {
+            ThemeManager.toggle();
+        });
+    </script>
 </body>
 
 </html>

@@ -145,8 +145,10 @@ function handleTimeUp() {
     updateLivesDisplay();
 
     if (lives <= 0) {
+        SoundEffects.gameOver();
         endGame();
     } else {
+        SoundEffects.wrong();
         alert("Time's up! You lost a life.");
         loadPuzzle();
     }
@@ -184,6 +186,7 @@ function checkAnswer() {
         if (currentActiveLevel === 1 && score === 5) {
             clearInterval(countdown);
             localStorage.setItem('level1_done', 'true');
+            SoundEffects.levelUp();
             setTimeout(showLevel1Complete, 500);
             return; // Stop loading next puzzle automatically
         }
@@ -200,10 +203,12 @@ function checkAnswer() {
         document.getElementById("combo").innerText = combo;
         document.getElementById("multiplier").innerText = `x${multiplier}`;
 
+        SoundEffects.correct();
         showSuccessFeedback();
 
         // Level Jump Detection
         if (score === 5 || score === 10 || score === 20 || score === 35) {
+            SoundEffects.levelUp();
             setTimeout(() => showLevelUpFeedback(score === 5 ? 2 : score === 10 ? 3 : score === 20 ? 4 : 'Elite'), 500);
         }
 
@@ -217,8 +222,10 @@ function checkAnswer() {
 
         if (lives <= 0) {
             clearInterval(countdown);
+            SoundEffects.gameOver();
             endGame();
         } else {
+            SoundEffects.wrong();
             alert("Wrong answer! You lost a life.");
         }
     }

@@ -4,6 +4,7 @@
 require_once '../db.php';
 header('Content-Type: application/json');
 
+session_save_path(__DIR__ . '/../sessions');
 session_start();
 error_log("Score Save Request: " . $_SERVER['REQUEST_METHOD'] . " Session ID: " . session_id());
 error_log("Session Data: " . print_r($_SESSION, true));
@@ -60,13 +61,33 @@ try {
         }
     }
 
-    // Achievement Check (Simple example: reach level 5 for Elite)
-    if ($level >= 5) {
-        $stmt_check = $pdo->prepare("SELECT id FROM user_achievements WHERE user_id = ? AND achievement_id = (SELECT id FROM achievements WHERE name = 'Elite')");
-        $stmt_check->execute([$user_id]);
+    // Achievement Check
+    $achievements_to_check = [];
+    if ($level >= 5)
+        $achievements_to_check[] = 'Elite';
+    if ($score >= 50)
+        $achievements_to_check[] = 'Banana Master';
+    if ($avg_response_time > 0 && $avg_response_time < 2)
+        $achievements_to_check[] = 'Speed Demon';
+
+    foreach ($achievements_to_check as $ach_name) {
+        $stmt_check = $pdo->prepare("SELECT id FROM user_achievements WHERE user_id = ? AND achievement_id = (SELECT id FROM achievements WHERE name = ?)");
+        $stmt_check->execute([$user_id, $ach_name]);
         if (!$stmt_check->fetch()) {
-            $stmt_award = $pdo->prepare("INSERT INTO user_achievements (user_id, achievement_id) SELECT ?, id FROM achievements WHERE name = 'Elite'");
-            $stmt_award->execute([$user_id]);
+            $stmt_award = $pdo->prepare("INSERT INTO user_achievements (user_id, achievement_id) SELECT ?, id FROM achievements WHERE name = ?");
+            $stmt_award->execute([$user_id, $ach_name]);
+        }
+    }
+
+    // Consistency King (Total games check)
+    $stmt_count = $pdo->prepare("SELECT COUNT(*) FROM scores WHERE user_id = ?");
+    $stmt_count->execute([$user_id]);
+    if ($stmt_count->fetchColumn() >= 5) {
+        $stmt_check_ck = $pdo->prepare("SELECT id FROM user_achievements WHERE user_id = ? AND achievement_id = (SELECT id FROM achievements WHERE name = 'Consistency King')");
+        $stmt_check_ck->execute([$user_id]);
+        if (!$stmt_check_ck->fetch()) {
+            $stmt_award_ck = $pdo->prepare("INSERT INTO user_achievements (user_id, achievement_id) SELECT ?, id FROM achievements WHERE name = 'Consistency King'");
+            $stmt_award_ck->execute([$user_id]);
         }
     }
 

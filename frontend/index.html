@@ -17,6 +17,7 @@
     </div>
 
     <div class="hero">
+        <button id="themeToggle" class="btn-theme" title="Toggle Dark Mode">🌓</button>
         <h1>Banana Catcher Adventure</h1>
         <p id="welcomeUser">Ready to start the ultimate puzzle journey? 🚀</p>
     </div>
@@ -37,7 +38,14 @@
         </div>
 
         <div class="card">
-            <span class="card-icon">📊</span>
+            <span class="card-icon">👤</span>
+            <h2>My Profile</h2>
+            <p class="text-muted mb-2">Check your stats and achievements!</p>
+            <a href="profile.html" class="btn">View Profile 📊</a>
+        </div>
+
+        <div class="card">
+            <span class="card-icon">🚪</span>
             <h2>Logout</h2>
             <p class="text-muted mb-2">Done for now? See you back soon!</p>
             <button id="logoutBtn" class="btn">Logout 👋</button>
@@ -66,6 +74,7 @@
     </div>
 
     <script src="js/api.js"></script>
+    <script src="js/theme.js"></script>
     <script>
         // Check authentication
         const user = localStorage.getItem('username');
@@ -79,6 +88,10 @@
         document.getElementById('logoutBtn')?.addEventListener('click', () => {
             localStorage.clear();
             window.location.href = 'login.html';
+        });
+
+        document.getElementById('themeToggle')?.addEventListener('click', () => {
+            ThemeManager.toggle();
         });
     </script>
 </body>

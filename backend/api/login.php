@@ -1,4 +1,5 @@
 <?php
+session_save_path(__DIR__ . '/../sessions');
 session_start();
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
@@ -24,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             error_log("Session set for: " . $user['username'] . " (ID: " . $user['id'] . ") Session ID: " . session_id());
 
-            file_put_contents($log_file, date('[Y-m-d H:i:s] ') . "Session set for: " . $user['username'] . " (ID: " . $user['id'] . ")\n", FILE_APPEND);
 
             echo json_encode([
                 "status" => "success",

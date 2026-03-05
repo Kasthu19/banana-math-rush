@@ -78,9 +78,11 @@
     </div>
 
     <nav>
+        <button id="themeToggle" class="btn-theme" style="position: static; margin-right: 1.5rem;"
+            title="Toggle Dark Mode">🌓</button>
         <a href="index.html">Dashboard</a>
         <a href="game.html">Play Game</a>
-        <a href="achievements.html">Badges</a>
+        <a href="profile.html">Profile</a>
     </nav>
 
     <div class="card leaderboard-card">
@@ -104,6 +106,7 @@
     </div>
 
     <script src="js/api.js"></script>
+    <script src="js/theme.js"></script>
     <script>
         // Check authentication
         if (!localStorage.getItem('username')) {
@@ -127,6 +130,10 @@
                     tbody.appendChild(tr);
                 });
             });
+        });
+
+        document.getElementById('themeToggle')?.addEventListener('click', () => {
+            ThemeManager.toggle();
         });
     </script>
 </body>

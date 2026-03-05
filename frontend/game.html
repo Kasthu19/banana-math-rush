@@ -15,9 +15,11 @@
     </div>
 
     <nav>
+        <button id="themeToggle" class="btn-theme" style="position: static; margin-right: 1.5rem;"
+            title="Toggle Dark Mode">🌓</button>
         <a href="index.html">Dashboard</a>
         <a href="leaderboard.html">Rankings</a>
-        <a href="achievements.html">Badges</a>
+        <a href="profile.html">Profile</a>
     </nav>
 
     <div id="timerBox">
@@ -93,7 +95,14 @@
     </div>
 
     <script src="js/api.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/sounds.js"></script>
     <script src="js/game.js"></script>
+    <script>
+        document.getElementById('themeToggle')?.addEventListener('click', () => {
+            ThemeManager.toggle();
+        });
+    </script>
 </body>
 
 </html>
