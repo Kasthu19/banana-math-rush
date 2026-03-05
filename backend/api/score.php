@@ -70,12 +70,15 @@ try {
     if ($avg_response_time > 0 && $avg_response_time < 2)
         $achievements_to_check[] = 'Speed Demon';
 
+    $newly_unlocked = [];
+
     foreach ($achievements_to_check as $ach_name) {
         $stmt_check = $pdo->prepare("SELECT id FROM user_achievements WHERE user_id = ? AND achievement_id = (SELECT id FROM achievements WHERE name = ?)");
         $stmt_check->execute([$user_id, $ach_name]);
         if (!$stmt_check->fetch()) {
             $stmt_award = $pdo->prepare("INSERT INTO user_achievements (user_id, achievement_id) SELECT ?, id FROM achievements WHERE name = ?");
             $stmt_award->execute([$user_id, $ach_name]);
+            $newly_unlocked[] = $ach_name;
         }
     }
 
@@ -88,11 +91,16 @@ try {
         if (!$stmt_check_ck->fetch()) {
             $stmt_award_ck = $pdo->prepare("INSERT INTO user_achievements (user_id, achievement_id) SELECT ?, id FROM achievements WHERE name = 'Consistency King'");
             $stmt_award_ck->execute([$user_id]);
+            $newly_unlocked[] = 'Consistency King';
         }
     }
 
     $pdo->commit();
-    echo json_encode(["status" => "success", "message" => "Score and analytics saved"]);
+    echo json_encode([
+        "status" => "success",
+        "message" => "Score and analytics saved",
+        "newly_unlocked" => $newly_unlocked
+    ]);
 
 } catch (Exception $e) {
     $pdo->rollBack();

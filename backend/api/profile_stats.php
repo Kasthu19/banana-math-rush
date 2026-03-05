@@ -52,10 +52,16 @@ try {
     $stmt_achievements->execute([$user_id]);
     $achievements = $stmt_achievements->fetchAll();
 
+    // 4. Get User Info (Diamonds)
+    $stmt_user = $pdo->prepare("SELECT diamonds FROM users WHERE id = ?");
+    $stmt_user->execute([$user_id]);
+    $user_data = $stmt_user->fetch();
+
     echo json_encode([
         "status" => "success",
         "data" => [
             "username" => $_SESSION['username'],
+            "diamonds" => $user_data['diamonds'] ?? 0,
             "summary" => $summary,
             "recent_games" => $recent_games,
             "achievements" => $achievements

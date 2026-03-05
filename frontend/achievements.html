@@ -76,6 +76,10 @@
         <a href="index.html">Dashboard</a>
         <a href="game.html">Play Game</a>
         <a href="leaderboard.html">Rankings</a>
+        <div class="diamond-hud" style="margin-left: auto;">
+            <span class="icon">💎</span>
+            <span id="diamondCount">0</span>
+        </div>
     </nav>
 
     <div class="hero">
@@ -95,52 +99,75 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-            const grid = document.getElementById("achievementsGrid");
-            const level1Done = localStorage.getItem('level1_done') === 'true';
-
-            // Define our Badges/Levels
-            const levels = [
-                { id: 1, name: 'Trainee', desc: 'Finish Level 1', condition: 0, earned: true }, // Level 1 is always unlocked
-                { id: 2, name: 'Beginner', desc: 'Reach level 2', condition: 'level1_done', icon: '🔒' },
-                { id: 3, name: 'Intermediate', desc: 'Reach level 3', condition: 10, icon: '🔒' },
-                { id: 4, name: 'Elite', desc: 'Reach level 5', condition: 35, icon: '🔒' },
-                { id: 5, name: 'Banana Master', desc: 'Score over 50', condition: 50, icon: '🔒' }
-            ];
-
-            grid.innerHTML = '';
-            levels.forEach(lvl => {
-                const card = document.createElement("div");
-                let isUnlocked = lvl.earned || (lvl.id === 2 && level1Done);
-
-                card.className = `achievement-card ${isUnlocked ? 'earned' : ''}`;
-                if (lvl.id === 2 && level1Done) {
-                    card.classList.add('unlocked-ready');
-                    card.title = "Click to Unlock Level 2!";
-                }
-
-                card.innerHTML = `
-                    <div class="lock-icon" id="lock-${lvl.id}">${isUnlocked ? '🌟' : '🔒'}</div>
-                    <h3>${lvl.name}</h3>
-                    <p>${lvl.desc}</p>
-                `;
-
-                card.onclick = () => {
-                    if (lvl.id === 2 && level1Done) {
-                        const lock = document.getElementById(`lock-${lvl.id}`);
-                        lock.innerText = '🔓';
-                        lock.classList.add('lock-breaking');
-                        setTimeout(() => {
-                            window.location.href = 'game.html?level=2';
-                        }, 800);
-                    } else if (lvl.earned || (lvl.id === 1)) {
-                        window.location.href = 'game.html?level=1';
-                    } else {
-                        alert("Finish the previous level to unlock this! 🐒");
-                    }
-                };
-                grid.appendChild(card);
-            });
+            loadDiamonds();
+            loadAchievements();
         });
+
+        function loadDiamonds() {
+            fetchProfile().then(res => {
+                if (res.status === "success") {
+                    document.getElementById("diamondCount").innerText = res.data.diamonds;
+                }
+            });
+        }
+
+        function loadAchievements() {
+            const grid = document.getElementById("achievementsGrid");
+            fetchAchievements().then(achievements => {
+                grid.innerHTML = '';
+                achievements.forEach(ach => {
+                    const card = document.createElement("div");
+                    const isEarned = ach.earned == 1;
+                    const isClaimed = ach.is_claimed == 1;
+
+                    card.className = `achievement-card ${isEarned ? 'earned' : ''}`;
+
+                    let content = '';
+                    if (!isEarned) {
+                        content = `<div class="lock-icon">🔒</div><h3>${ach.name}</h3><p>${ach.description}</p>`;
+                    } else if (isEarned && !isClaimed) {
+                        content = `<div class="gift-box" onclick="claim('${ach.name}', this)">🎁</div><h3>Earned!</h3><p>Tap the gift to reveal ${ach.diamond_value} diamonds!</p>`;
+                    } else {
+                        content = `<div class="lock-icon">🌟</div><h3>${ach.name}</h3><p>${ach.description}</p>`;
+                    }
+
+                    card.innerHTML = content;
+                    grid.appendChild(card);
+                });
+            });
+        }
+
+        function claim(name, el) {
+            el.innerText = '✨';
+            claimReward(name).then(res => {
+                if (res.status === "success") {
+                    spawnDiamonds(15);
+                    setTimeout(() => {
+                        loadDiamonds();
+                        loadAchievements();
+                    }, 2000);
+                }
+            });
+        }
+
+        function spawnDiamonds(count) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const d = document.createElement("div");
+                    d.className = "diamond-particle";
+                    d.innerText = "💎";
+                    d.style.left = Math.random() * 80 + 10 + "%";
+                    d.style.top = "-50px";
+                    document.body.appendChild(d);
+                    const anim = d.animate([
+                        { top: "-50px", opacity: 0 },
+                        { top: "20%", opacity: 1, offset: 0.2 },
+                        { top: "100%", opacity: 0 }
+                    ], { duration: 2000, easing: "ease-in" });
+                    anim.onfinish = () => d.remove();
+                }, i * 100);
+            }
+        }
     </script>
 </body>
 

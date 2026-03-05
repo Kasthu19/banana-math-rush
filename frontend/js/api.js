@@ -31,3 +31,32 @@ function fetchAchievements() {
     return fetch(API_BASE + "achievements.php")
         .then(res => res.json());
 }
+
+function claimReward(achievementName, isLevelReward = false) {
+    const params = new URLSearchParams();
+    if (achievementName) params.append('achievement_name', achievementName);
+    if (isLevelReward) params.append('is_level_reward', '1');
+
+    return fetch(API_BASE + "claim_reward.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params.toString()
+    }).then(res => res.json());
+}
+
+function spendDiamonds(amount, purpose) {
+    const params = new URLSearchParams();
+    params.append('amount', amount);
+    params.append('purpose', purpose);
+
+    return fetch(API_BASE + "spend_diamonds.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params.toString()
+    }).then(res => res.json());
+}
+
+function fetchProfile() {
+    return fetch(API_BASE + "profile_stats.php")
+        .then(res => res.json());
+}

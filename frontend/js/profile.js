@@ -34,6 +34,7 @@ function fetchProfileData() {
 function renderProfile(data) {
     // Update Header
     document.getElementById('profileUsername').textContent = `${data.username}'s Profile`;
+    document.getElementById('diamondCount').innerText = data.diamonds || 0;
 
     // Update Stats
     const summary = data.summary;

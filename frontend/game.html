@@ -20,6 +20,10 @@
         <a href="index.html">Dashboard</a>
         <a href="leaderboard.html">Rankings</a>
         <a href="profile.html">Profile</a>
+        <div class="diamond-hud" style="margin-left: auto;">
+            <span class="icon">💎</span>
+            <span id="diamondCount">0</span>
+        </div>
     </nav>
 
     <div id="timerBox">
@@ -46,7 +50,11 @@
         </div>
         <div class="stat-box">
             <span class="label">Lives Left</span>
-            <span id="livesDisplay" class="value" style="font-size: 1rem;">❤️❤️❤️</span>
+            <div id="livesContainer" class="value"
+                style="font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                <span id="monkeyReaction">🐒</span>
+                <span id="livesDisplay">❤️❤️❤️</span>
+            </div>
         </div>
     </div>
 
@@ -79,6 +87,13 @@
         <div class="text">CORRECT!</div>
     </div>
 
+    <!-- Wrong Feedback Overlay -->
+    <div id="wrongOverlay" class="success-overlay wrong-overlay">
+        <div class="emoji">🐒❌</div>
+        <div class="text" id="wrongText">WRONG ANSWER!</div>
+        <div class="sub-text">You lost a life ❤️</div>
+    </div>
+
     <!-- Level Up Overlay -->
     <div id="levelUpOverlay" class="level-up-overlay">
         <div class="level-icon">🚀</div>
@@ -92,6 +107,27 @@
         <div class="celebrate-text">LEVEL 1 FINISHED!</div>
         <p>You caught all the bananas! 🍌</p>
         <button onclick="window.location.href='achievements.html'" class="btn mt-4">Go to Unlock Level 2 🔓</button>
+    </div>
+
+    <!-- Achievement Toast -->
+    <div id="achievementToast" class="achievement-toast">
+        <div class="icon">🏆</div>
+        <div class="details">
+            <h4>Achievement Unlocked!</h4>
+            <p id="achievementName">Speed Demon</p>
+        </div>
+    </div>
+
+    <!-- Revive Modal -->
+    <div id="reviveModal" class="revive-modal">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">👼</div>
+        <h2>Continue?</h2>
+        <p>Spend diamonds to buy 3 extra lives and keep your streak alive!</p>
+        <button id="reviveBtn" class="revive-btn">
+            REVIVE <span class="cost">💎 20</span>
+        </button>
+        <button onclick="endGameFinal()" class="btn-outline" style="color: var(--text-muted); border-color: #ddd;">No
+            thanks, end game</button>
     </div>
 
     <script src="js/api.js"></script>

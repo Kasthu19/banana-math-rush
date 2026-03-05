@@ -18,6 +18,10 @@
 
     <div class="hero">
         <button id="themeToggle" class="btn-theme" title="Toggle Dark Mode">🌓</button>
+        <div class="diamond-hud" style="position: absolute; top: 1rem; right: 4rem;">
+            <span class="icon">💎</span>
+            <span id="diamondCount">0</span>
+        </div>
         <h1>Banana Catcher Adventure</h1>
         <p id="welcomeUser">Ready to start the ultimate puzzle journey? 🚀</p>
     </div>
@@ -76,14 +80,16 @@
     <script src="js/api.js"></script>
     <script src="js/theme.js"></script>
     <script>
-        // Check authentication
-        const user = localStorage.getItem('username');
-        if (user) {
-            document.getElementById('welcomeUser').textContent = `Hello ${user}! Ready to play? 🐒`;
-        } else {
-            // Redirect to login if no user found
-            window.location.href = 'login.html';
-        }
+        // Fetch and display user data
+        fetchProfile().then(res => {
+            if (res.status === "success") {
+                const user = res.data;
+                document.getElementById('welcomeUser').textContent = `Hello ${user.username}! Ready to play? 🐒`;
+                document.getElementById('diamondCount').innerText = user.diamonds;
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
 
         document.getElementById('logoutBtn')?.addEventListener('click', () => {
             localStorage.clear();

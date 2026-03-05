@@ -62,6 +62,14 @@ function startGame() {
     document.getElementById("gameOver").style.display = "none";
     document.getElementById("gameArea").style.display = "block";
     document.getElementById("submitAnswer").disabled = false;
+    document.getElementById("reviveModal").classList.remove("active");
+
+    // Initialize Diamonds from Profile
+    fetchProfile().then(res => {
+        if (res.status === "success") {
+            document.getElementById("diamondCount").innerText = res.data.diamonds;
+        }
+    });
 
     loadPuzzle();
 }
@@ -149,7 +157,7 @@ function handleTimeUp() {
         endGame();
     } else {
         SoundEffects.wrong();
-        alert("Time's up! You lost a life.");
+        showWrongFeedback("Time's up!");
         loadPuzzle();
     }
 }
@@ -159,7 +167,9 @@ function checkAnswer() {
     let userAnswer = document.getElementById("answer").value;
 
     if (userAnswer === "") {
-        alert("Please enter an answer");
+        const input = document.getElementById("answer");
+        input.classList.add("shake-error");
+        setTimeout(() => input.classList.remove("shake-error"), 500);
         return;
     }
 
@@ -175,31 +185,15 @@ function checkAnswer() {
     if (isCorrect) {
         clearInterval(countdown);
 
-        score++;
+        combo++;
+        multiplier = Math.floor(combo / 5) + 1;
+
+        score += multiplier;
         questionsAnswered++;
         totalResponseTime += responseTime;
 
         document.getElementById("score").innerText = score;
         document.getElementById("finalScoreDisplay").innerText = score;
-
-        // Level 1 Finish Logic
-        if (currentActiveLevel === 1 && score === 5) {
-            clearInterval(countdown);
-            localStorage.setItem('level1_done', 'true');
-            SoundEffects.levelUp();
-            setTimeout(showLevel1Complete, 500);
-            return; // Stop loading next puzzle automatically
-        }
-
-        // Bonus for speed
-        if (responseTime < 3) {
-            combo++;
-            if (combo > 2) multiplier = 2;
-        } else {
-            combo = 0;
-            multiplier = 1;
-        }
-
         document.getElementById("combo").innerText = combo;
         document.getElementById("multiplier").innerText = `x${multiplier}`;
 
@@ -208,8 +202,18 @@ function checkAnswer() {
 
         // Level Jump Detection
         if (score === 5 || score === 10 || score === 20 || score === 35) {
+            const nextLvl = score === 5 ? 2 : score === 10 ? 3 : score === 20 ? 4 : 'Elite';
             SoundEffects.levelUp();
-            setTimeout(() => showLevelUpFeedback(score === 5 ? 2 : score === 10 ? 3 : score === 20 ? 4 : 'Elite'), 500);
+            setTimeout(() => showLevelUpFeedback(nextLvl), 500);
+
+            // Level Reward
+            claimReward(null, true).then(res => {
+                if (res.status === "success") {
+                    spawnDiamonds(10);
+                    const currentBalance = parseInt(document.getElementById("diamondCount").innerText);
+                    document.getElementById("diamondCount").innerText = currentBalance + res.reward;
+                }
+            });
         }
 
         setTimeout(loadPuzzle, 1500); // Wait for animations before loading next puzzle
@@ -226,17 +230,44 @@ function checkAnswer() {
             endGame();
         } else {
             SoundEffects.wrong();
-            alert("Wrong answer! You lost a life.");
+            showWrongFeedback("Wrong Answer!");
         }
     }
 }
 
 function updateLivesDisplay() {
-    let hearts = "";
-    for (let i = 0; i < lives; i++) {
-        hearts += "❤️";
+    const container = document.getElementById("livesDisplay");
+    const monkey = document.getElementById("monkeyReaction");
+
+    // Heart Icons with shattering animation
+    const oldHearts = container.querySelectorAll('.heart');
+    if (oldHearts.length > lives && lives >= 0) {
+        const heartToLose = oldHearts[lives];
+        if (heartToLose) heartToLose.classList.add('shatter');
     }
-    document.getElementById("livesDisplay").innerText = hearts || "💀";
+
+    // Full Refresh of hearts if needed (e.g. game start)
+    if (oldHearts.length === 0 || lives === 3) {
+        container.innerHTML = "";
+        for (let i = 0; i < 3; i++) {
+            const span = document.createElement("span");
+            span.className = "heart";
+            span.innerText = "❤️";
+            if (i >= lives) span.style.opacity = "0";
+            container.appendChild(span);
+        }
+    }
+
+    // Monkey Reaction Logic
+    if (monkey) {
+        if (lives === 3) monkey.innerText = "🐒";
+        else if (lives === 2) monkey.innerText = "🐵";
+        else if (lives === 1) monkey.innerText = "🙈";
+        else monkey.innerText = "💀";
+
+        monkey.classList.add("bounce");
+        setTimeout(() => monkey.classList.remove("bounce"), 500);
+    }
 }
 
 function endGame() {
@@ -247,6 +278,43 @@ function endGame() {
     // Fix: Show the final score in the Game Over message
     document.getElementById("finalScoreDisplay").innerText = score;
 
+    // Trigger Revive Modal instead of final end if user has diamonds and level >= 3
+    const currentLvlNum = parseInt(document.getElementById("level").innerText) || 1;
+    if (currentLvlNum >= 3) {
+        setTimeout(showReviveModal, 1000);
+    } else {
+        saveFinalGameResults();
+    }
+}
+
+function showReviveModal() {
+    const modal = document.getElementById("reviveModal");
+    modal.classList.add("active");
+
+    document.getElementById("reviveBtn").onclick = () => {
+        spendDiamonds(20, "Revive").then(res => {
+            if (res.status === "success") {
+                modal.classList.remove("active");
+                lives = 3;
+                updateLivesDisplay();
+                document.getElementById("gameArea").style.display = "block";
+                document.getElementById("gameOver").style.display = "none";
+                document.getElementById("submitAnswer").disabled = false;
+                document.getElementById("diamondCount").innerText = res.new_balance;
+                loadPuzzle();
+            } else {
+                alert(res.message);
+            }
+        });
+    };
+}
+
+function endGameFinal() {
+    document.getElementById("reviveModal").classList.remove("active");
+    saveFinalGameResults();
+}
+
+function saveFinalGameResults() {
     const avgResponseTime = questionsAnswered > 0 ? (totalResponseTime / questionsAnswered).toFixed(2) : 0;
 
     saveScore({
@@ -256,6 +324,11 @@ function endGame() {
         analytics: analytics
     }).then(result => {
         console.log("Game result saved:", result);
+        if (result.newly_unlocked && result.newly_unlocked.length > 0) {
+            result.newly_unlocked.forEach((name, index) => {
+                setTimeout(() => showAchievementPopup(name), index * 3500);
+            });
+        }
     });
 }
 
@@ -278,6 +351,62 @@ function showSuccessFeedback() {
     setTimeout(() => {
         overlay.classList.remove("active");
     }, 800);
+}
+
+function showWrongFeedback(message) {
+    const overlay = document.getElementById("wrongOverlay");
+    const text = document.getElementById("wrongText");
+
+    text.innerText = message;
+    overlay.classList.add("active");
+    document.getElementById("gameArea").classList.add("shake");
+
+    setTimeout(() => {
+        overlay.classList.remove("active");
+        document.getElementById("gameArea").classList.remove("shake");
+        if (message === "Wrong Answer!") {
+            loadPuzzle();
+        }
+    }, 1200);
+}
+
+function showAchievementPopup(name) {
+    const toast = document.getElementById("achievementToast");
+    const nameEl = document.getElementById("achievementName");
+
+    if (!toast || !nameEl) return;
+
+    nameEl.innerText = name;
+    toast.classList.add("active");
+    SoundEffects.levelUp(); // Reuse level up sound for achievements
+
+    setTimeout(() => {
+        toast.classList.remove("active");
+    }, 3000);
+}
+
+function spawnDiamonds(count) {
+    for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+            const diamond = document.createElement("div");
+            diamond.className = "diamond-particle";
+            diamond.innerText = "💎";
+            diamond.style.left = Math.random() * 80 + 10 + "%";
+            diamond.style.top = "-50px";
+            document.body.appendChild(diamond);
+
+            const animation = diamond.animate([
+                { top: "-50px", opacity: 0 },
+                { top: "20%", opacity: 1, offset: 0.2 },
+                { top: "100%", opacity: 0 }
+            ], {
+                duration: 2000 + Math.random() * 1000,
+                easing: "ease-in"
+            });
+
+            animation.onfinish = () => diamond.remove();
+        }, i * 100);
+    }
 }
 
 function createConfetti() {
