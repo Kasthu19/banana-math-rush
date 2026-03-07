@@ -202,18 +202,18 @@ function checkAnswer() {
 
         // Level Jump Detection
         if (score === 5 || score === 10 || score === 20 || score === 35) {
-            const nextLvl = score === 5 ? 2 : score === 10 ? 3 : score === 20 ? 4 : 'Elite';
-            SoundEffects.levelUp();
-            setTimeout(() => showLevelUpFeedback(nextLvl), 500);
+            const currentLvlTitle = document.getElementById("level").innerText;
+            if (currentLvlTitle == "1" && score === 5) {
+                SoundEffects.levelUp();
+                setTimeout(showLevel1Complete, 500);
+                return; // Stop here, wait for gift click
+            } else if (score > 5) {
+                const nextLvl = score === 10 ? 3 : score === 20 ? 4 : 'Elite';
+                SoundEffects.levelUp();
+                setTimeout(() => showLevelUpFeedback(nextLvl), 500);
+                return; // Stop here, wait for gift click
+            }
 
-            // Level Reward
-            claimReward(null, true).then(res => {
-                if (res.status === "success") {
-                    spawnDiamonds(10);
-                    const currentBalance = parseInt(document.getElementById("diamondCount").innerText);
-                    document.getElementById("diamondCount").innerText = currentBalance + res.reward;
-                }
-            });
         }
 
         setTimeout(loadPuzzle, 1500); // Wait for animations before loading next puzzle
@@ -385,27 +385,37 @@ function showAchievementPopup(name) {
     }, 3000);
 }
 
-function spawnDiamonds(count) {
+function spawnDiamonds(count, sourceElement) {
+    const rect = sourceElement ? sourceElement.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2, width: 0, height: 0 };
+    const startX = rect.left + rect.width / 2;
+    const startY = rect.top + rect.height / 2;
+
     for (let i = 0; i < count; i++) {
         setTimeout(() => {
             const diamond = document.createElement("div");
             diamond.className = "diamond-particle";
             diamond.innerText = "💎";
-            diamond.style.left = Math.random() * 80 + 10 + "%";
-            diamond.style.top = "-50px";
+            diamond.style.left = startX + "px";
+            diamond.style.top = startY + "px";
             document.body.appendChild(diamond);
 
+            // Burst math
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = 5 + Math.random() * 10;
+            const destX = (Math.cos(angle) * 150) + (Math.random() - 0.5) * 50;
+            const destY = (Math.sin(angle) * 150) + (Math.random() - 0.5) * 50;
+
             const animation = diamond.animate([
-                { top: "-50px", opacity: 0 },
-                { top: "20%", opacity: 1, offset: 0.2 },
-                { top: "100%", opacity: 0 }
+                { transform: 'translate(0, 0) scale(0)', opacity: 0 },
+                { transform: `translate(${destX / 2}px, ${destY / 2}px) scale(1.5)`, opacity: 1, offset: 0.2 },
+                { transform: `translate(${destX}px, ${destY}px) scale(1)`, opacity: 0 }
             ], {
-                duration: 2000 + Math.random() * 1000,
-                easing: "ease-in"
+                duration: 1000 + Math.random() * 500,
+                easing: "cubic-bezier(0.175, 0.885, 0.32, 1.275)"
             });
 
             animation.onfinish = () => diamond.remove();
-        }, i * 100);
+        }, i * 50);
     }
 }
 
@@ -438,25 +448,79 @@ function createConfetti() {
 function showLevelUpFeedback(level) {
     const overlay = document.getElementById("levelUpOverlay");
     const levelNum = document.getElementById("nextLevelNum");
+    const giftBox = document.getElementById("levelGiftBox");
+    const msg = document.getElementById("giftClaimMsg");
 
     levelNum.innerText = level;
     overlay.classList.add("active");
     document.getElementById("gameArea").classList.add("shake");
 
-    // Extra confetti for level up
-    for (let i = 0; i < 100; i++) {
-        setTimeout(createConfetti, i * 10);
-    }
+    // Show Reward Gift if earned
+    giftBox.style.display = "block";
+    msg.style.display = "block";
+    giftBox.innerText = "🎁";
+    giftBox.classList.remove("open");
 
-    setTimeout(() => {
-        overlay.classList.remove("active");
-        document.getElementById("gameArea").classList.remove("shake");
-    }, 2500);
+    giftBox.onclick = () => {
+        giftBox.innerText = "✨";
+        giftBox.classList.add("open");
+        msg.innerText = "Reward Collected! 💎";
+
+        // Level Reward Claim
+        claimReward(null, true).then(res => {
+            if (res.status === "success") {
+                spawnDiamonds(res.reward, giftBox);
+                const currentBalance = parseInt(document.getElementById("diamondCount").innerText);
+                document.getElementById("diamondCount").innerText = currentBalance + res.reward;
+            }
+        });
+
+        setTimeout(() => {
+            overlay.classList.remove("active");
+            document.getElementById("gameArea").classList.remove("shake");
+            giftBox.style.display = "none";
+            msg.style.display = "none";
+        }, 1500);
+    };
+
+    // Extra confetti for level up
+    for (let i = 0; i < 50; i++) {
+        setTimeout(createConfetti, i * 20);
+    }
 }
 
 function showLevel1Complete() {
     const overlay = document.getElementById("levelCompleteOverlay");
+    const giftBox = document.getElementById("lv1GiftBox");
+    const msg = document.getElementById("lv1GiftMsg");
+    const nextBtn = document.getElementById("lv1NextBtn");
+
     overlay.classList.add("active");
+    giftBox.style.display = "block";
+    msg.style.display = "block";
+    giftBox.innerText = "🎁";
+    nextBtn.style.display = "none";
+
+    giftBox.onclick = () => {
+        giftBox.innerText = "✨";
+        msg.innerText = "Level 1 Reward Claimed! 💎";
+
+        claimReward(null, true).then(res => {
+            if (res.status === "success") {
+                spawnDiamonds(5, giftBox);
+                const currentBalance = parseInt(document.getElementById("diamondCount").innerText);
+                document.getElementById("diamondCount").innerText = currentBalance + res.reward;
+
+                // Show the original "Continue" button after claim
+                setTimeout(() => {
+                    giftBox.style.display = "none";
+                    msg.style.display = "none";
+                    nextBtn.style.display = "inline-block";
+                    localStorage.setItem('level1_done', 'true');
+                }, 1500);
+            }
+        });
+    };
 
     // Massive confetti
     for (let i = 0; i < 150; i++) {

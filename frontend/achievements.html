@@ -139,33 +139,47 @@
 
         function claim(name, el) {
             el.innerText = '✨';
-            claimReward(name).then(res => {
-                if (res.status === "success") {
-                    spawnDiamonds(15);
+            claimReward(name).then(result => {
+                if (result.status === 'success') {
+                    spawnDiamonds(result.reward, el);
+
+                    // Wait for animation
                     setTimeout(() => {
-                        loadDiamonds();
-                        loadAchievements();
-                    }, 2000);
+                        location.reload();
+                    }, 1000);
                 }
             });
         }
 
-        function spawnDiamonds(count) {
+        function spawnDiamonds(count, originElement) {
+            const rect = originElement.getBoundingClientRect();
+            const startX = rect.left + rect.width / 2;
+            const startY = rect.top + rect.height / 2;
+
             for (let i = 0; i < count; i++) {
                 setTimeout(() => {
                     const d = document.createElement("div");
                     d.className = "diamond-particle";
                     d.innerText = "💎";
-                    d.style.left = Math.random() * 80 + 10 + "%";
-                    d.style.top = "-50px";
+                    d.style.left = startX + "px";
+                    d.style.top = startY + "px";
                     document.body.appendChild(d);
+
+                    // Burst math
+                    const angle = Math.random() * Math.PI * 2;
+                    const destX = (Math.cos(angle) * 150) + (Math.random() - 0.5) * 50;
+                    const destY = (Math.sin(angle) * 150) + (Math.random() - 0.5) * 50;
+
                     const anim = d.animate([
-                        { top: "-50px", opacity: 0 },
-                        { top: "20%", opacity: 1, offset: 0.2 },
-                        { top: "100%", opacity: 0 }
-                    ], { duration: 2000, easing: "ease-in" });
+                        { transform: 'translate(0, 0) scale(0)', opacity: 0 },
+                        { transform: `translate(${destX / 2}px, ${destY / 2}px) scale(1.5)`, opacity: 1, offset: 0.2 },
+                        { transform: `translate(${destX}px, ${destY}px) scale(1)`, opacity: 0 }
+                    ], {
+                        duration: 1000 + Math.random() * 500,
+                        easing: "cubic-bezier(0.175, 0.885, 0.32, 1.275)"
+                    });
                     anim.onfinish = () => d.remove();
-                }, i * 100);
+                }, i * 50);
             }
         }
     </script>

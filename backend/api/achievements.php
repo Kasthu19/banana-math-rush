@@ -15,6 +15,7 @@ try {
                IFNULL(ua.is_claimed, 0) as is_claimed
         FROM achievements a
         LEFT JOIN user_achievements ua ON a.id = ua.achievement_id AND ua.user_id = ?
+        GROUP BY a.id
     ");
     $stmt->execute([$user_id]);
     $achievements = $stmt->fetchAll();

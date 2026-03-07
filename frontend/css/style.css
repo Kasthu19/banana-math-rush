@@ -854,3 +854,127 @@ body.level-elite {
     background: var(--white);
     color: var(--primary-orange-hover);
 }
+/* Diamond HUD */
+.diamond-hud {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    gap: 0.5rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+}
+
+[data-theme='dark'] .diamond-hud {
+    color: white;
+}
+
+.diamond-hud .icon {
+    font-size: 1.1rem;
+    filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.5));
+    animation: diamondFloat 3s infinite ease-in-out;
+}
+
+@keyframes diamondFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+/* Diamond Rain / Particles */
+.diamond-particle {
+    position: fixed;
+    font-size: 1.5rem;
+    pointer-events: none;
+    z-index: 3000;
+    filter: drop-shadow(0 0 5px #38bdf8);
+}
+
+/* Gift Box Animation */
+.gift-box {
+    font-size: 4rem;
+    cursor: pointer;
+    transition: transform 0.3s;
+    animation: giftWiggle 2s infinite ease-in-out;
+    display: inline-block;
+}
+
+@keyframes giftWiggle {
+    0%, 100% { transform: rotate(0); }
+    10%, 30%, 50%, 70%, 90% { transform: rotate(-5deg); }
+    20%, 40%, 60%, 80% { transform: rotate(5deg); }
+}
+
+.gift-box:hover {
+    transform: scale(1.1);
+}
+
+/* Revive Modal */
+.revive-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: var(--white);
+    padding: 3rem;
+    border-radius: 2.5rem;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    z-index: 2500;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-width: 400px;
+    width: 90%;
+}
+
+.revive-modal.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.revive-modal h2 {
+    color: var(--primary-orange);
+    margin: 0.5rem 0;
+}
+
+.revive-modal p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+.revive-btn {
+    background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 1.5rem;
+    font-weight: 800;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.revive-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(14, 165, 233, 0.4);
+}
+
+.revive-btn .cost {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.9rem;
+}

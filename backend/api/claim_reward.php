@@ -19,7 +19,7 @@ try {
     $pdo->beginTransaction();
 
     if ($is_level_reward) {
-        $reward = 10; // Fixed level reward
+        $reward = 1; // Scaled level reward as requested
         $stmt = $pdo->prepare("UPDATE users SET diamonds = diamonds + ? WHERE id = ?");
         $stmt->execute([$reward, $user_id]);
         $message = "Level reward claimed!";

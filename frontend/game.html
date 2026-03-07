@@ -99,6 +99,9 @@
         <div class="level-icon">🚀</div>
         <div class="level-text">LEVEL UP!</div>
         <div class="new-level-display">Level <span id="nextLevelNum">2</span></div>
+        <div id="levelGiftBox" class="gift-box" style="margin-top: 1rem; display: none;">🎁</div>
+        <p id="giftClaimMsg" class="text-muted" style="display: none; color: white !important;">Tap to open your Level
+            Reward!</p>
     </div>
 
     <!-- Level Complete Overlay -->
@@ -106,7 +109,10 @@
         <div class="monkey-dance">🐒🕺</div>
         <div class="celebrate-text">LEVEL 1 FINISHED!</div>
         <p>You caught all the bananas! 🍌</p>
-        <button onclick="window.location.href='achievements.html'" class="btn mt-4">Go to Unlock Level 2 🔓</button>
+        <div id="lv1GiftBox" class="gift-box" style="margin: 1rem auto;">🎁</div>
+        <p id="lv1GiftMsg" class="text-muted">Tap to open your Special Gift!</p>
+        <button id="lv1NextBtn" onclick="window.location.href='achievements.html'" class="btn mt-4"
+            style="display: none;">Go to Unlock Level 2 🔓</button>
     </div>
 
     <!-- Achievement Toast -->
