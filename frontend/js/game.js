@@ -20,12 +20,19 @@ let currentActiveLevel = 1; // Default
 document.addEventListener("DOMContentLoaded", () => {
 
     startGame();
+    SoundEffects.resume();
 
     document.getElementById("submitAnswer")
-        .addEventListener("click", checkAnswer);
+        .addEventListener("click", () => {
+            SoundEffects.resume();
+            checkAnswer();
+        });
 
     document.getElementById("answer").addEventListener("keypress", (e) => {
-        if (e.key === "Enter") checkAnswer();
+        if (e.key === "Enter") {
+            SoundEffects.resume();
+            checkAnswer();
+        }
     });
 });
 
