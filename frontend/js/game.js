@@ -207,17 +207,17 @@ function checkAnswer() {
         // Level Jump Detection
         if (score === 5 || score === 10 || score === 20 || score === 35) {
             const currentLvlTitle = document.getElementById("level").innerText;
+            
             if (currentLvlTitle == "1" && score === 5) {
                 SoundEffects.levelUp();
                 setTimeout(showLevel1Complete, 500);
-                return; // Stop here, wait for gift click
+                return;
             } else if (score > 5) {
-                const nextLvl = score === 10 ? 3 : score === 20 ? 4 : 'Elite';
+                const nextLvlDisplay = score === 10 ? 3 : score === 20 ? 4 : 'Elite';
                 SoundEffects.levelUp();
-                setTimeout(() => showLevelUpFeedback(nextLvl), 500);
-                return; // Stop here, wait for gift click
+                setTimeout(() => showLevelUpFeedback(nextLvlDisplay), 500);
+                return;
             }
-
         }
 
         setTimeout(loadPuzzle, 1500); // Wait for animations before loading next puzzle
@@ -476,6 +476,15 @@ function showLevelUpFeedback(level) {
                 spawnDiamonds(res.reward, giftBox);
                 const currentBalance = parseInt(document.getElementById("diamondCount").innerText);
                 document.getElementById("diamondCount").innerText = currentBalance + res.reward;
+
+                // SAVE PROGRESS NOW to unlock next level
+                const nextLvlNum = level === 'Elite' ? 5 : level;
+                saveScore({
+                    score: score,
+                    level: nextLvlNum,
+                    avg_response_time: (totalResponseTime / (questionsAnswered || 1)).toFixed(2),
+                    analytics: []
+                });
             }
         });
 
@@ -517,6 +526,14 @@ function showLevel1Complete() {
                 spawnDiamonds(5, giftBox);
                 const currentBalance = parseInt(document.getElementById("diamondCount").innerText);
                 document.getElementById("diamondCount").innerText = currentBalance + res.reward;
+
+                // Unlock Level 2
+                saveScore({
+                    score: 5,
+                    level: 2,
+                    avg_response_time: (totalResponseTime / (questionsAnswered || 1)).toFixed(2),
+                    analytics: []
+                });
 
                 // Show the original "Continue" button or auto-progress
                 setTimeout(() => {

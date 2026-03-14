@@ -56,6 +56,14 @@
         </div>
     </div>
 
+    <div class="card mt-4" style="width: 100%; max-width: 1100px; text-align: center; background: linear-gradient(to bottom, #fef9c3, #fde047); border: none; padding: 2rem 1rem; border-radius: 3rem;">
+        <h1 style="font-size: 2.8rem; color: #854d0e; text-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 0.25rem; font-weight: 950; letter-spacing: -1px;">SELECT LEVEL</h1>
+        <p style="font-weight: 900; color: #713f12; font-size: 1rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8;">YOUR ADVENTURE AWAITS! 🚀</p>
+        <div class="level-grid" id="levelSelectionGrid" style="display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; justify-content: center !important;">
+            <!-- Gem cards injected here -->
+        </div>
+    </div>
+
     <div class="card mt-4" style="width: 100%; max-width: 1100px; text-align: left; align-items: start;">
         <h2>How to Play</h2>
         <div class="card-grid" style="margin-top: 1rem; grid-template-columns: repeat(3, 1fr);">
@@ -91,6 +99,8 @@
                 // Update Play Button to start from highest level
                 const playBtn = document.querySelector('a[href="game.html"]');
                 if (playBtn) playBtn.href = `game.html?level=${highestLevel}`;
+
+                renderLevelSelection(highestLevel);
             } else {
                 window.location.href = 'login.html';
             }
@@ -101,9 +111,49 @@
             window.location.href = 'login.html';
         });
 
+        // Update theme toggle
         document.getElementById('themeToggle')?.addEventListener('click', () => {
             ThemeManager.toggle();
         });
+
+        // Level selection injection
+        function renderLevelSelection(highestLevel) {
+            const grid = document.getElementById('levelSelectionGrid');
+            const levels = [
+                { id: 1, name: 'Level 1', emoji: '🍌' },
+                { id: 2, name: 'Level 2', emoji: '🐒' },
+                { id: 3, name: 'Level 3', emoji: '🌴' },
+                { id: 4, name: 'Level 4', emoji: '⭐' },
+                { id: 5, name: 'Elite', emoji: '🏆' }
+            ];
+
+            grid.innerHTML = levels.map(lvl => {
+                let status = 'locked';
+                let label = 'Locked';
+                let icon = ''; // Icons only for locked/completed
+                let action = '';
+
+                if (lvl.id < highestLevel) {
+                    status = 'completed';
+                    label = 'Finished';
+                    icon = '<div class="lvl-icon">✅</div>';
+                } else if (lvl.id == highestLevel) {
+                    status = 'current';
+                    label = 'Play Now';
+                    action = `onclick="window.location.href='game.html?level=${lvl.id}'"`;
+                } else {
+                    icon = '<div class="lvl-icon">🔒</div>';
+                }
+
+                return `
+                    <div class="level-card ${status}" ${action}>
+                        ${icon}
+                        <h3>${lvl.id}</h3>
+                        <span>${label}</span>
+                    </div>
+                `;
+            }).join('');
+        }
     </script>
 </body>
 
