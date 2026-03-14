@@ -1,11 +1,11 @@
 <?php
-// backend/api/achievements.php
+require_once '../auth_utils.php';
+setup_api_headers();
+start_secure_session();
+require_auth();
+$user_id = $_SESSION['user_id'];
 
 require_once '../db.php';
-header('Content-Type: application/json');
-
-session_start();
-$user_id = $_SESSION['user_id'] ?? 1;
 
 try {
     // Fetch all achievements and whether the user has earned them

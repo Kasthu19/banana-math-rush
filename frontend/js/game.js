@@ -44,6 +44,7 @@ function startGame() {
     if (currentActiveLevel === 2) score = 5;
     else if (currentActiveLevel === 3) score = 10;
     else if (currentActiveLevel === 4) score = 20;
+    else if (currentActiveLevel >= 5) score = 35;
     else score = 0;
 
     lives = 3;
@@ -59,10 +60,6 @@ function startGame() {
     document.getElementById("combo").innerText = combo;
     document.getElementById("multiplier").innerText = "x1";
 
-    // Show monkey on start if Level 2+
-    if (currentActiveLevel >= 2) {
-        setTimeout(() => showLevelUpFeedback(currentActiveLevel), 800);
-    }
 
     updateLivesDisplay();
 
@@ -487,6 +484,9 @@ function showLevelUpFeedback(level) {
             document.getElementById("gameArea").classList.remove("shake");
             giftBox.style.display = "none";
             msg.style.display = "none";
+            
+            // Automatically start the next level after reward
+            window.location.href = `game.html?level=${level}`;
         }, 1500);
     };
 
@@ -518,11 +518,13 @@ function showLevel1Complete() {
                 const currentBalance = parseInt(document.getElementById("diamondCount").innerText);
                 document.getElementById("diamondCount").innerText = currentBalance + res.reward;
 
-                // Show the original "Continue" button after claim
+                // Show the original "Continue" button or auto-progress
                 setTimeout(() => {
                     giftBox.style.display = "none";
                     msg.style.display = "none";
                     nextBtn.style.display = "inline-block";
+                    nextBtn.innerText = "Start Level 2 🚀";
+                    nextBtn.onclick = () => window.location.href = 'game.html?level=2';
                     localStorage.setItem('level1_done', 'true');
                 }, 1500);
             }

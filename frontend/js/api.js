@@ -1,7 +1,7 @@
 const API_BASE = "../backend/api/";
 
 function fetchBanana() {
-    return fetch(API_BASE + "banana.php")
+    return fetch(API_BASE + "banana.php", { credentials: 'include' })
         .then(res => res.json());
 }
 
@@ -18,17 +18,18 @@ function saveScore(data) {
     return fetch(API_BASE + "score.php", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params.toString()
+        body: params.toString(),
+        credentials: 'include'
     }).then(res => res.json());
 }
 
 function fetchLeaderboard() {
-    return fetch(API_BASE + "leaderboard.php")
+    return fetch(API_BASE + "leaderboard.php", { credentials: 'include' })
         .then(res => res.json());
 }
 
 function fetchAchievements() {
-    return fetch(API_BASE + "achievements.php")
+    return fetch(API_BASE + "achievements.php", { credentials: 'include' })
         .then(res => res.json());
 }
 
@@ -40,7 +41,8 @@ function claimReward(achievementName, isLevelReward = false) {
     return fetch(API_BASE + "claim_reward.php", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params.toString()
+        body: params.toString(),
+        credentials: 'include'
     }).then(res => res.json());
 }
 
@@ -52,11 +54,12 @@ function spendDiamonds(amount, purpose) {
     return fetch(API_BASE + "spend_diamonds.php", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params.toString()
+        body: params.toString(),
+        credentials: 'include'
     }).then(res => res.json());
 }
 
 function fetchProfile() {
-    return fetch(API_BASE + "profile_stats.php")
+    return fetch(API_BASE + "profile_stats.php", { credentials: 'include' })
         .then(res => res.json());
 }

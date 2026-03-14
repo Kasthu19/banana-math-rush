@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(100),
     password_hash VARCHAR(255) NOT NULL,
     diamonds INT DEFAULT 0,
+    highest_level INT DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

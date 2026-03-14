@@ -1,14 +1,8 @@
 <?php
-// backend/api/score.php
-
-require_once '../db.php';
-header('Content-Type: application/json');
-
-session_save_path(__DIR__ . '/../sessions');
-session_start();
-error_log("Score Save Request: " . $_SERVER['REQUEST_METHOD'] . " Session ID: " . session_id());
-error_log("Session Data: " . print_r($_SESSION, true));
-error_log("POST Data: " . print_r($_POST, true));
+require_once '../auth_utils.php';
+setup_api_headers();
+start_secure_session();
+require_auth();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -25,12 +19,7 @@ if (isset($_SESSION['last_submission']) && ($now - $_SESSION['last_submission'] 
 }
 $_SESSION['last_submission'] = $now;
 
-// In a real app, user_id would come from session
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    echo json_encode(["status" => "error", "message" => "User not authenticated"]);
-    exit;
-}
+require_once '../db.php';
 $user_id = $_SESSION['user_id'];
 
 $score = filter_input(INPUT_POST, 'score', FILTER_SANITIZE_NUMBER_INT);
@@ -94,6 +83,10 @@ try {
             $newly_unlocked[] = 'Consistency King';
         }
     }
+
+    // Update Highest Level in User Profile
+    $stmt_update_level = $pdo->prepare("UPDATE users SET highest_level = CASE WHEN highest_level < ? THEN ? ELSE highest_level END WHERE id = ?");
+    $stmt_update_level->execute([$level, $level, $user_id]);
 
     $pdo->commit();
     echo json_encode([

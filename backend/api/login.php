@@ -1,8 +1,7 @@
 <?php
-session_save_path(__DIR__ . '/../sessions');
-session_start();
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
+require_once '../auth_utils.php';
+setup_api_headers();
+start_secure_session();
 
 require_once '../db.php';
 
@@ -26,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             error_log("Session set for: " . $user['username'] . " (ID: " . $user['id'] . ") Session ID: " . session_id());
 
 
+            session_write_close();
             echo json_encode([
                 "status" => "success",
                 "message" => "Login successful",

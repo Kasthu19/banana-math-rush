@@ -1,8 +1,9 @@
 <?php
-// backend/api/leaderboard.php
+header("Access-Control-Allow-Origin: " . ($_SERVER['HTTP_ORIGIN'] ?? '*'));
+header("Access-Control-Allow-Credentials: true");
+header("Content-Type: application/json");
 
 require_once '../db.php';
-header('Content-Type: application/json');
 
 try {
     $stmt = $pdo->query("

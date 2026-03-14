@@ -1,15 +1,10 @@
 <?php
-// backend/api/spend_diamonds.php
-require_once '../db.php';
-header('Content-Type: application/json');
-session_save_path(__DIR__ . '/../sessions');
-session_start();
+require_once '../auth_utils.php';
+setup_api_headers();
+start_secure_session();
+require_auth();
 
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    echo json_encode(["status" => "error", "message" => "Unauthorized"]);
-    exit;
-}
+require_once '../db.php';
 
 $user_id = $_SESSION['user_id'];
 $amount = intval($_POST['amount'] ?? 0);

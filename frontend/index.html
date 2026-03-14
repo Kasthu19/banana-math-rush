@@ -84,8 +84,13 @@
         fetchProfile().then(res => {
             if (res.status === "success") {
                 const user = res.data;
-                document.getElementById('welcomeUser').textContent = `Hello ${user.username}! Ready to play? 🐒`;
+                const highestLevel = user.highest_level || 1;
+                document.getElementById('welcomeUser').textContent = `Hello ${user.username}! Ready to play Level ${highestLevel}? 🐒`;
                 document.getElementById('diamondCount').innerText = user.diamonds;
+                
+                // Update Play Button to start from highest level
+                const playBtn = document.querySelector('a[href="game.html"]');
+                if (playBtn) playBtn.href = `game.html?level=${highestLevel}`;
             } else {
                 window.location.href = 'login.html';
             }

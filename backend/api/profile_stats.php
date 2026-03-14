@@ -1,17 +1,10 @@
 <?php
-// backend/api/profile_stats.php
+require_once '../auth_utils.php';
+setup_api_headers();
+start_secure_session();
+require_auth();
 
 require_once '../db.php';
-header('Content-Type: application/json');
-
-session_save_path(__DIR__ . '/../sessions');
-session_start();
-
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    echo json_encode(["status" => "error", "message" => "User not authenticated"]);
-    exit;
-}
 
 $user_id = $_SESSION['user_id'];
 
@@ -52,8 +45,8 @@ try {
     $stmt_achievements->execute([$user_id]);
     $achievements = $stmt_achievements->fetchAll();
 
-    // 4. Get User Info (Diamonds)
-    $stmt_user = $pdo->prepare("SELECT diamonds FROM users WHERE id = ?");
+    // 4. Get User Info (Diamonds & Highest Level)
+    $stmt_user = $pdo->prepare("SELECT diamonds, highest_level FROM users WHERE id = ?");
     $stmt_user->execute([$user_id]);
     $user_data = $stmt_user->fetch();
 
@@ -62,6 +55,7 @@ try {
         "data" => [
             "username" => $_SESSION['username'],
             "diamonds" => $user_data['diamonds'] ?? 0,
+            "highest_level" => $user_data['highest_level'] ?? 1,
             "summary" => $summary,
             "recent_games" => $recent_games,
             "achievements" => $achievements
