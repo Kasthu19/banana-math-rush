@@ -634,6 +634,7 @@ nav a.active {
 .level-up-overlay.active {
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
+    pointer-events: auto !important; /* Critical: Enable clicking on the gift/UI */
 }
 
 .level-up-overlay .level-icon {
@@ -981,30 +982,31 @@ body.level-elite {
 
 
 
+
 /* ==========================================================
-   ROBUST LEVEL SEPARATOR (COMPACT SIDE-BY-SIDE GEMS)
+   PERFECT LEVEL SELECTION (SPACIOUS 3D GEMS)
    ========================================================== */
 #levelSelectionGrid {
     display: flex !important;
     flex-direction: row !important;
-    flex-wrap: wrap !important;
+    flex-wrap: wrap !important; /* Allow wrapping on small screens only */
     justify-content: center !important;
     align-items: center !important;
-    gap: 1.5rem !important; /* Smaller gap */
+    gap: 4.5rem !important; /* LARGE gap to stop label overlap */
     width: 100% !important;
-    max-width: 800px !important;
-    margin: 1rem auto !important;
-    padding: 1.5rem !important;
+    max-width: 1100px !important;
+    margin: 2rem auto !important;
+    padding: 3rem 1rem !important;
     background: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(10px);
-    border-radius: 2rem;
+    backdrop-filter: blur(8px);
+    border-radius: 3rem;
     border: none !important;
 }
 
 .level-card {
-    width: 80px !important;  /* Shrunk size */
-    height: 80px !important;
-    min-width: 80px !important;
+    width: 85px !important;
+    height: 85px !important;
+    min-width: 85px !important;
     border-radius: 50% !important;
     display: flex !important;
     flex-direction: column !important;
@@ -1013,80 +1015,94 @@ body.level-elite {
     position: relative !important;
     cursor: pointer !important;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    border: 4px solid rgba(255, 255, 255, 0.4) !important;
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2) !important;
-    overflow: visible !important;
+    /* High-Quality 3D Glass Surface */
+    border: 5px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 
+        0 10px 0 rgba(0, 0, 0, 0.2), 
+        inset -8px -8px 15px rgba(0,0,0,0.2), 
+        inset 8px 8px 15px rgba(255,255,255,0.4) !important;
+    background-clip: padding-box !important;
 }
 
 /* Yellow/Gold Gems (Active) */
 .level-card.current {
-    background: radial-gradient(circle at 30% 30%, #fde047 0%, #ca8a04 100%) !important;
-    border-color: #fef08a !important;
-    box-shadow: 0 6px 0 #854d0e, 0 10px 20px rgba(234, 179, 8, 0.4) !important;
+    background: radial-gradient(circle at 35% 35%, #fde047 0%, #ca8a04 100%) !important;
+    border-color: #fef9c3 !important;
+    box-shadow: 
+        0 10px 0 #854d0e, 
+        0 20px 40px rgba(234, 179, 8, 0.6),
+        inset -8px -8px 15px rgba(0,0,0,0.1),
+        inset 8px 8px 20px rgba(255,255,255,0.7) !important;
 }
 
 .level-card.current:hover {
-    transform: translateY(-5px) scale(1.1) !important;
-    box-shadow: 0 8px 0 #854d0e, 0 15px 25px rgba(234, 179, 8, 0.5) !important;
+    transform: translateY(-10px) scale(1.15) !important;
+    box-shadow: 
+        0 12px 0 #854d0e, 
+        0 25px 50px rgba(234, 179, 8, 0.7),
+        inset -8px -8px 15px rgba(0,0,0,0.1),
+        inset 8px 8px 25px rgba(255,255,255,0.8) !important;
 }
 
 /* Green Gems (Completed) */
 .level-card.completed {
-    background: radial-gradient(circle at 30% 30%, #4ade80 0%, #15803d 100%) !important;
-    border-color: #b9f6ca !important;
-    box-shadow: 0 5px 0 #14532d, 0 8px 15px rgba(22, 163, 74, 0.2) !important;
+    background: radial-gradient(circle at 35% 35%, #bef264 0%, #4ae31c 100%) !important;
+    border-color: #d9f99d !important;
+    box-shadow: 
+        0 8px 0 #14532d, 
+        0 12px 25px rgba(74, 222, 128, 0.3),
+        inset -6px -6px 12px rgba(0,0,0,0.1),
+        inset 6px 6px 12px rgba(255,255,255,0.5) !important;
 }
 
 /* Gray Gems (Locked) */
 .level-card.locked {
-    background: radial-gradient(circle at 30% 30%, #94a3b8 0%, #475569 100%) !important;
-    border-color: #cbd5e1 !important;
-    box-shadow: 0 5px 0 #1e293b !important;
+    background: radial-gradient(circle at 35% 35%, #cbd5e1 0%, #475569 100%) !important;
+    border-color: #f1f5f9 !important;
+    box-shadow: 0 8px 0 #1e293b, 0 5px 15px rgba(0,0,0,0.2) !important;
     cursor: not-allowed !important;
-    opacity: 0.7 !important;
+    opacity: 0.9 !important;
 }
 
 .level-card .lvl-icon {
-    font-size: 1.5rem !important; /* Shrunk icon */
+    font-size: 1.8rem !important;
     color: white !important;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
-    margin-bottom: -2px !important;
+    position: absolute !important;
+    top: -30px !important; /* Floating above the gem */
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)) !important;
 }
 
 .level-card h3 {
-    font-size: 1.8rem !important; /* Shrunk number */
-    font-weight: 900 !important;
+    font-size: 2.2rem !important; /* Bold level number */
+    font-weight: 950 !important;
     color: white !important;
     margin: 0 !important;
     line-height: 1 !important;
     font-family: 'Arial Black', sans-serif !important;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.4) !important;
+    text-shadow: 1px 2px 4px rgba(0,0,0,0.5) !important;
+    z-index: 2;
 }
 
 .level-card span {
     position: absolute !important;
-    bottom: -30px !important; /* Adjusted position */
+    bottom: -45px !important; /* Well below the gem */
     left: 50% !important;
     transform: translateX(-50%) !important;
-    font-size: 0.65rem !important; /* Shrunk label */
-    font-weight: 800 !important;
+    font-size: 0.75rem !important;
+    font-weight: 900 !important;
     text-transform: uppercase !important;
-    background: #854d0e !important;
-    color: white !important;
-    padding: 0.2rem 0.6rem !important;
-    border-radius: 0.8rem !important;
+    background: white !important;
+    color: #451a03 !important;
+    padding: 0.25rem 0.75rem !important;
+    border-radius: 1rem !important;
     white-space: nowrap !important;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+    border: 2px solid rgba(0,0,0,0.05) !important;
 }
 
-.level-card.completed span { background: #16a34a !important; }
-.level-card.locked span { background: #64748b !important; }
-
-.level-card h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    color: var(--text-dark);
-}
+.level-card.completed span { background: #dcfce7 !important; color: #166534 !important; }
+.level-card.locked span { background: #f1f5f9 !important; color: #475569 !important; }
+.level-card.current span { background: #fef08a !important; color: #854d0e !important; box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3) !important; }
 
 .level-card span {
     font-size: 0.75rem;

@@ -471,10 +471,22 @@ function showLevelUpFeedback(level) {
         msg.innerText = "Reward Collected! 💎";
 
         // Level Reward Claim
+        const proceedToNextLevel = () => {
+            setTimeout(() => {
+                overlay.classList.remove("active");
+                document.getElementById("gameArea").classList.remove("shake");
+                giftBox.style.display = "none";
+                msg.style.display = "none";
+                
+                // Automatically start the next level after reward
+                window.location.href = `game.html?level=${level}`;
+            }, 1500);
+        };
+
         claimReward(null, true).then(res => {
             if (res.status === "success") {
                 spawnDiamonds(res.reward, giftBox);
-                const currentBalance = parseInt(document.getElementById("diamondCount").innerText);
+                const currentBalance = parseInt(document.getElementById("diamondCount").innerText) || 0;
                 document.getElementById("diamondCount").innerText = currentBalance + res.reward;
 
                 // SAVE PROGRESS NOW to unlock next level
@@ -484,19 +496,14 @@ function showLevelUpFeedback(level) {
                     level: nextLvlNum,
                     avg_response_time: (totalResponseTime / (questionsAnswered || 1)).toFixed(2),
                     analytics: []
-                });
+                }).finally(proceedToNextLevel);
+            } else {
+                proceedToNextLevel();
             }
+        }).catch(err => {
+            console.error("Reward claim failed:", err);
+            proceedToNextLevel();
         });
-
-        setTimeout(() => {
-            overlay.classList.remove("active");
-            document.getElementById("gameArea").classList.remove("shake");
-            giftBox.style.display = "none";
-            msg.style.display = "none";
-            
-            // Automatically start the next level after reward
-            window.location.href = `game.html?level=${level}`;
-        }, 1500);
     };
 
     // Extra confetti for level up

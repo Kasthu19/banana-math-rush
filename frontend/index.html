@@ -24,6 +24,11 @@
         </div>
         <h1>Banana Catcher Adventure</h1>
         <p id="welcomeUser">Ready to start the ultimate puzzle journey? 🚀</p>
+        <div style="display: flex; justify-content: center; margin-top: 1rem; width: 100%;">
+            <button onclick="resetProgress()" style="background: rgba(0,0,0,0.35); color: white; border: 2px solid rgba(255,255,255,0.25); padding: 0.6rem 1.4rem; border-radius: 2rem; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.6rem; width: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <span>🔄</span> Reset My Progress
+            </button>
+        </div>
     </div>
 
     <div class="card-grid">
@@ -56,10 +61,10 @@
         </div>
     </div>
 
-    <div class="card mt-4" style="width: 100%; max-width: 1100px; text-align: center; background: linear-gradient(to bottom, #fef9c3, #fde047); border: none; padding: 2rem 1rem; border-radius: 3rem;">
-        <h1 style="font-size: 2.8rem; color: #854d0e; text-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 0.25rem; font-weight: 950; letter-spacing: -1px;">SELECT LEVEL</h1>
-        <p style="font-weight: 900; color: #713f12; font-size: 1rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8;">YOUR ADVENTURE AWAITS! 🚀</p>
-        <div class="level-grid" id="levelSelectionGrid" style="display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; justify-content: center !important;">
+    <div class="card mt-4" style="width: 100%; max-width: 1100px; text-align: center; background: linear-gradient(to bottom, #fef9c3, #fde047); border: none; padding: 2.5rem 1rem; border-radius: 2.5rem; box-shadow: 0 15px 35px rgba(0,0,0,0.05);">
+        <h1 style="font-size: 3rem; color: #854d0e; text-shadow: 0 4px 8px rgba(0,0,0,0.05); margin-bottom: 0.25rem; font-weight: 950; letter-spacing: -1px;">SELECT LEVEL</h1>
+        <p style="font-weight: 900; color: #713f12; font-size: 1.1rem; margin-bottom: 3rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;">YOUR ADVENTURE AWAITS! 🚀</p>
+        <div id="levelSelectionGrid">
             <!-- Gem cards injected here -->
         </div>
     </div>
@@ -111,6 +116,18 @@
             window.location.href = 'login.html';
         });
 
+        async function resetProgress() {
+            if (confirm("Reset all progress back to Level 1?")) {
+                const res = await fetch('backend/api/debug_reset.php');
+                const data = await res.json();
+                if (data.status === 'success') {
+                    location.reload();
+                } else {
+                    alert("Reset failed: " + data.message);
+                }
+            }
+        }
+
         // Update theme toggle
         document.getElementById('themeToggle')?.addEventListener('click', () => {
             ThemeManager.toggle();
@@ -130,13 +147,15 @@
             grid.innerHTML = levels.map(lvl => {
                 let status = 'locked';
                 let label = 'Locked';
-                let icon = ''; // Icons only for locked/completed
+                let icon = ''; 
                 let action = '';
 
                 if (lvl.id < highestLevel) {
                     status = 'completed';
                     label = 'Finished';
                     icon = '<div class="lvl-icon">✅</div>';
+                    // Allow replaying finished levels
+                    action = `onclick="window.location.href='game.html?level=${lvl.id}'"`;
                 } else if (lvl.id == highestLevel) {
                     status = 'current';
                     label = 'Play Now';
