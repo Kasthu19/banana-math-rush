@@ -255,30 +255,6 @@ nav a.active {
     object-fit: cover;
 }
 
-.upload-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.5);
-    height: 35%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition);
-    opacity: 0;
-}
-
-.profile-pic-container:hover .upload-overlay {
-    opacity: 1;
-}
-
-.upload-overlay span {
-    color: white;
-    font-size: 0.9rem;
-}
-
 .btn-theme {
     position: absolute;
     top: 1.5rem;
