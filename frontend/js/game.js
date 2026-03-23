@@ -7,7 +7,7 @@ let score = 0;
 let lives = 3;
 let combo = 0;
 let multiplier = 1;
-let timer = 15;
+let timer = 60;
 let countdown = null;
 let correctAnswer = null;
 let questionStartTime = null;
@@ -95,14 +95,14 @@ function loadPuzzle() {
 
 function resetTimer() {
     let level = currentActiveLevel;
-    let timerValue = 15;
+    let timerValue = 60;
 
     // Highest reached logic
-    if (score >= 35 || currentActiveLevel >= 5) { timerValue = 5; level = "Elite 🏆"; }
-    else if (score >= 20 || currentActiveLevel >= 4) { timerValue = 7; level = 4; }
-    else if (score >= 10 || currentActiveLevel >= 3) { timerValue = 10; level = 3; }
-    else if (score >= 5 || currentActiveLevel >= 2) { timerValue = 12; level = 2; }
-    else { timerValue = 15; level = 1; }
+    if (score >= 35 || currentActiveLevel >= 5) { timerValue = 12; level = "Elite 🏆"; }
+    else if (score >= 20 || currentActiveLevel >= 4) { timerValue = 25; level = 4; }
+    else if (score >= 10 || currentActiveLevel >= 3) { timerValue = 35; level = 3; }
+    else if (score >= 5 || currentActiveLevel >= 2) { timerValue = 45; level = 2; }
+    else { timerValue = 60; level = 1; }
 
     timer = timerValue;
     document.getElementById("level").innerText = level;
