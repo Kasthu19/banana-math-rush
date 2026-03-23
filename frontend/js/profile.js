@@ -7,7 +7,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     fetchProfileData();
+    setupPhotoUpload();
 });
+
+function setupPhotoUpload() {
+    const input = document.getElementById('profilePicInput');
+    if (!input) return;
+
+    input.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('profile_pic', file);
+
+        fetch('../backend/api/upload_profile_pic.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                document.getElementById('profilePic').src = data.data.profile_pic;
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(err => {
+            console.error('Upload failed:', err);
+            alert('Failed to upload photo.');
+        });
+    });
+}
 
 function fetchProfileData() {
     fetch("../backend/api/profile_stats.php")
@@ -35,6 +66,10 @@ function renderProfile(data) {
     // Update Header
     document.getElementById('profileUsername').textContent = `${data.username}'s Profile`;
     document.getElementById('diamondCount').innerText = data.diamonds || 0;
+
+    if (data.profile_pic) {
+        document.getElementById('profilePic').src = data.profile_pic;
+    }
 
     // Update Stats
     const summary = data.summary;

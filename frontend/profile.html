@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Profile - Banana Catcher</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=1.1">
 </head>
 
 <body>
@@ -21,6 +21,15 @@
             <span class="icon">💎</span>
             <span id="diamondCount">0</span>
         </div>
+
+        <div class="profile-pic-container">
+            <img id="profilePic" src="assets/profile_pics/default.png" alt="Profile Picture" onerror="this.src='https://api.dicebear.com/7.x/avataaars/svg?seed=monkey'">
+            <div class="upload-overlay" onclick="document.getElementById('profilePicInput').click()">
+                <span>📷</span>
+            </div>
+            <input type="file" id="profilePicInput" accept="image/*" style="display: none;">
+        </div>
+
         <h1 id="profileUsername">Athlete's Profile</h1>
         <p>Your journey and milestones so far 🌟</p>
         <a href="index.html" class="btn-outline">Back to Home 🏠</a>

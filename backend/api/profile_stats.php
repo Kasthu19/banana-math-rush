@@ -45,8 +45,8 @@ try {
     $stmt_achievements->execute([$user_id]);
     $achievements = $stmt_achievements->fetchAll();
 
-    // 4. Get User Info (Diamonds & Highest Level)
-    $stmt_user = $pdo->prepare("SELECT diamonds, highest_level FROM users WHERE id = ?");
+    // 4. Get User Info (Diamonds, Highest Level, Profile Pic)
+    $stmt_user = $pdo->prepare("SELECT diamonds, highest_level, profile_pic FROM users WHERE id = ?");
     $stmt_user->execute([$user_id]);
     $user_data = $stmt_user->fetch();
 
@@ -56,6 +56,7 @@ try {
             "username" => $_SESSION['username'],
             "diamonds" => $user_data['diamonds'] ?? 0,
             "highest_level" => $user_data['highest_level'] ?? 1,
+            "profile_pic" => $user_data['profile_pic'] ?? null,
             "summary" => $summary,
             "recent_games" => $recent_games,
             "achievements" => $achievements
