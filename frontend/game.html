@@ -15,11 +15,12 @@
     </div>
 
     <nav>
-        <button id="themeToggle" class="btn-theme" style="position: static; margin-right: 1.5rem;"
+        <button id="languageToggle" class="btn-lang" onclick="i18n.toggle()" style="position: static; margin-right: 0.5rem; height: 35px;">தமிழ்</button>
+        <button id="themeToggle" class="btn-theme" style="position: static; margin-right: 1.5rem; width: 35px; height: 35px;"
             title="Toggle Dark Mode">🌓</button>
-        <a href="index.html">Dashboard</a>
-        <a href="leaderboard.html">Rankings</a>
-        <a href="profile.html">Profile</a>
+        <a href="index.html" data-i18n="dashboard">Dashboard</a>
+        <a href="leaderboard.html" data-i18n="rankings">Rankings</a>
+        <a href="profile.html" data-i18n="profile">Profile</a>
         <div class="diamond-hud" style="margin-left: auto;">
             <span class="icon">💎</span>
             <span id="diamondCount">0</span>
@@ -28,28 +29,28 @@
 
     <div id="timerBox">
         <span style="font-size: 1.5rem;">⏱️</span>
-        Time Left: <span id="timer">15</span>s
+        <span data-i18n="time_left">Time Left</span>: <span id="timer">15</span>s
     </div>
 
     <div id="gameArea">
         <img id="bananaImage" src="" alt="Puzzle Loading...">
         <div class="form-group" style="margin-top: 1rem;">
-            <input type="number" id="answer" placeholder="Your Answer 🍌" autofocus>
+            <input type="number" id="answer" data-i18n="your_answer" placeholder="Your Answer 🍌" autofocus>
         </div>
-        <button id="submitAnswer" class="btn mt-4">Submit Answer 🎯</button>
+        <button id="submitAnswer" class="btn mt-4" data-i18n="submit">Submit Answer 🎯</button>
     </div>
 
     <div class="stats-grid">
         <div class="stat-box">
-            <span class="label">Total Score</span>
+            <span class="label" data-i18n="total_score">Total Score</span>
             <span id="score" class="value">0</span>
         </div>
         <div class="stat-box">
-            <span class="label">Current Level</span>
+            <span class="label" data-i18n="current_level">Current Level</span>
             <span id="level" class="value">1</span>
         </div>
         <div class="stat-box">
-            <span class="label">Lives Left</span>
+            <span class="label" data-i18n="lives_left">Lives Left</span>
             <div id="livesContainer" class="value"
                 style="font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
                 <span id="monkeyReaction">🐒</span>
@@ -60,66 +61,66 @@
 
     <div class="stats-grid">
         <div class="stat-box">
-            <span class="label">Combo</span>
+            <span class="label" data-i18n="combo">Combo</span>
             <span id="combo" class="value">0</span>
         </div>
         <div class="stat-box">
-            <span class="label">Multiplier</span>
+            <span class="label" data-i18n="multiplier">Multiplier</span>
             <span id="multiplier" class="value">x1</span>
         </div>
         <div class="stat-box" id="eliteBadge" style="display: none; background: #fee2e2;">
-            <span class="label">Mode</span>
-            <span class="value elite-mode">ELITE</span>
+            <span class="label" data-i18n="mode_label">Mode</span>
+            <span class="value elite-mode" data-i18n="mode_elite">ELITE</span>
         </div>
     </div>
 
     <div id="gameOver" class="auth-container"
         style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 100;">
         <span class="auth-icon">🏁</span>
-        <h2>Game Over!</h2>
-        <p class="text-muted">Final Score: <span id="finalScoreDisplay">0</span></p>
-        <button onclick="location.reload()" class="btn mt-4">Play Again 🔄</button>
+        <h2 data-i18n="game_over">Game Over!</h2>
+        <p class="text-muted"><span data-i18n="final_score">Final Score</span>: <span id="finalScoreDisplay">0</span></p>
+        <button onclick="location.reload()" class="btn mt-4" data-i18n="try_again">Play Again 🔄</button>
     </div>
 
     <!-- Success Feedback Overlay -->
     <div id="successOverlay" class="success-overlay">
         <div class="emoji">🐒👏</div>
-        <div class="text">CORRECT!</div>
+        <div class="text" data-i18n="correct">CORRECT!</div>
     </div>
 
     <!-- Wrong Feedback Overlay -->
     <div id="wrongOverlay" class="success-overlay wrong-overlay">
         <div class="emoji">🐒❌</div>
-        <div class="text" id="wrongText">WRONG ANSWER!</div>
-        <div class="sub-text">You lost a life ❤️</div>
+        <div class="text" id="wrongText" data-i18n="wrong">WRONG ANSWER!</div>
+        <div class="sub-text" data-i18n="lost_life">You lost a life ❤️</div>
     </div>
 
     <!-- Level Up Overlay -->
     <div id="levelUpOverlay" class="level-up-overlay">
         <div class="level-icon">🚀</div>
-        <div class="level-text">LEVEL UP!</div>
-        <div class="new-level-display">Level <span id="nextLevelNum">2</span></div>
+        <div class="level-text" data-i18n="level_up">LEVEL UP!</div>
+        <div class="new-level-display"><span data-i18n="level">Level</span> <span id="nextLevelNum">2</span></div>
         <div id="levelGiftBox" class="gift-box" style="margin-top: 1rem; display: none;">🎁</div>
-        <p id="giftClaimMsg" class="text-muted" style="display: none; color: white !important;">Tap to open your Level
+        <p id="giftClaimMsg" class="text-muted" style="display: none; color: white !important;" data-i18n="tap_reward">Tap to open your Level
             Reward!</p>
     </div>
 
     <!-- Level Complete Overlay -->
     <div id="levelCompleteOverlay" class="level-complete-overlay">
         <div class="monkey-dance">🐒🕺</div>
-        <div class="celebrate-text">LEVEL 1 FINISHED!</div>
-        <p>You caught all the bananas! 🍌</p>
+        <div class="celebrate-text" data-i18n="level_finished">LEVEL FINISHED!</div>
+        <p data-i18n="caught_all">You caught all the bananas! 🍌</p>
         <div id="lv1GiftBox" class="gift-box" style="margin: 1rem auto;">🎁</div>
-        <p id="lv1GiftMsg" class="text-muted">Tap to open your Special Gift!</p>
+        <p id="lv1GiftMsg" class="text-muted" data-i18n="tap_gift">Tap to open your Special Gift!</p>
         <button id="lv1NextBtn" onclick="window.location.href='achievements.html'" class="btn mt-4"
-            style="display: none;">Go to Unlock Level 2 🔓</button>
+            style="display: none;" data-i18n="unlock_next">Go to Unlock Next Level 🔓</button>
     </div>
 
     <!-- Achievement Toast -->
     <div id="achievementToast" class="achievement-toast">
         <div class="icon">🏆</div>
         <div class="details">
-            <h4>Achievement Unlocked!</h4>
+            <h4 data-i18n="achievement_unlocked">Achievement Unlocked!</h4>
             <p id="achievementName">Speed Demon</p>
         </div>
     </div>
@@ -127,17 +128,17 @@
     <!-- Revive Modal -->
     <div id="reviveModal" class="revive-modal">
         <div style="font-size: 4rem; margin-bottom: 1rem;">👼</div>
-        <h2>Continue?</h2>
-        <p>Spend diamonds to buy 3 extra lives and keep your streak alive!</p>
+        <h2 data-i18n="continue">Continue?</h2>
+        <p data-i18n="revive_desc">Spend diamonds to buy 3 extra lives and keep your streak alive!</p>
         <button id="reviveBtn" class="revive-btn">
-            REVIVE <span class="cost">💎 20</span>
+            <span data-i18n="revive_btn">REVIVE</span> <span class="cost">💎 20</span>
         </button>
-        <button onclick="endGameFinal()" class="btn-outline" style="color: var(--text-muted); border-color: #ddd;">No
-            thanks, end game</button>
+        <button onclick="endGameFinal()" class="btn-outline" style="color: var(--text-muted); border-color: #ddd;" data-i18n="no_thanks">No thanks, end game</button>
     </div>
 
     <script src="js/api.js"></script>
     <script src="js/theme.js"></script>
+    <script src="js/i18n.js"></script>
     <script src="js/sounds.js"></script>
     <script src="js/game.js"></script>
     <script>

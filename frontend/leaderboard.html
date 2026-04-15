@@ -78,25 +78,26 @@
     </div>
 
     <nav>
-        <button id="themeToggle" class="btn-theme" style="position: static; margin-right: 1.5rem;"
+        <button id="languageToggle" class="btn-lang" onclick="i18n.toggle()" style="position: static; margin-right: 0.5rem; height: 35px;">தமிழ்</button>
+        <button id="themeToggle" class="btn-theme" style="position: static; margin-right: 1.5rem; width: 35px; height: 35px;"
             title="Toggle Dark Mode">🌓</button>
-        <a href="index.html">Dashboard</a>
-        <a href="game.html">Play Game</a>
-        <a href="profile.html">Profile</a>
+        <a href="index.html" data-i18n="dashboard">Dashboard</a>
+        <a href="game.html" data-i18n="play_now">Play Game</a>
+        <a href="profile.html" data-i18n="profile">Profile</a>
     </nav>
 
     <div class="card leaderboard-card">
         <span class="card-icon">👑</span>
-        <h1>Global Rankings</h1>
-        <p class="text-muted">The top 10 banana catchers in the world!</p>
+        <h1 data-i18n="rankings_title">Global Rankings</h1>
+        <p class="text-muted" data-i18n="rankings_subtitle">The top 10 banana catchers in the world!</p>
 
         <table id="leaderboardTable">
             <thead>
                 <tr>
-                    <th>Rank</th>
-                    <th>Catcher</th>
-                    <th>Score</th>
-                    <th>Level</th>
+                    <th data-i18n="rank">Rank</th>
+                    <th data-i18n="player">Catcher</th>
+                    <th data-i18n="score">Score</th>
+                    <th data-i18n="level">Level</th>
                 </tr>
             </thead>
             <tbody>
@@ -107,6 +108,7 @@
 
     <script src="js/api.js"></script>
     <script src="js/theme.js"></script>
+    <script src="js/i18n.js"></script>
     <script>
         // Check authentication
         if (!localStorage.getItem('username')) {
@@ -125,7 +127,7 @@
                         </td>
                         <td style="font-weight: 600;">${row.username}</td>
                         <td style="font-weight: 800;">${row.high_score.toLocaleString()}</td>
-                        <td><span class="btn" style="padding: 0.25rem 0.75rem; font-size: 0.8rem; width: auto;">Lvl ${row.max_level}</span></td>
+                        <td><span class="btn" style="padding: 0.25rem 0.75rem; font-size: 0.8rem; width: auto;">${i18n.t('level')} ${row.max_level}</span></td>
                     `;
                     tbody.appendChild(tr);
                 });

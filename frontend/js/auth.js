@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 })
                 .catch(err => {
-                    message.innerText = "Connection error. Please try again.";
+                    message.innerText = i18n.t('connection_error');
                     message.className = "error";
                 });
         });
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const confirmPassword = document.getElementById("confirmPassword").value;
 
             if (password !== confirmPassword) {
-                message.innerText = "Passwords do not match!";
+                message.innerText = i18n.t('passwords_dont_match');
                 message.className = "error";
                 return;
             }
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 })
                 .catch(err => {
-                    message.innerText = "Connection error. Please try again.";
+                    message.innerText = i18n.t('connection_error');
                     message.className = "error";
                 });
         });

@@ -17,16 +17,17 @@
     </div>
 
     <div class="hero">
+        <button id="languageToggle" class="btn-lang" onclick="i18n.toggle()">தமிழ்</button>
         <button id="themeToggle" class="btn-theme" title="Toggle Dark Mode">🌓</button>
-        <div class="diamond-hud" style="position: absolute; top: 1rem; right: 4rem;">
+        <div class="diamond-hud" style="position: absolute; top: 1rem; right: 8rem;">
             <span class="icon">💎</span>
             <span id="diamondCount">0</span>
         </div>
-        <h1>Banana Catcher Adventure</h1>
-        <p id="welcomeUser">Ready to start the ultimate puzzle journey? 🚀</p>
+        <h1 data-i18n="app_title">Banana Catcher Adventure</h1>
+        <p id="welcomeUser" data-i18n="hero_subtitle">Ready to start the ultimate puzzle journey? 🚀</p>
         <div style="display: flex; justify-content: center; margin-top: 1rem; width: 100%;">
             <button onclick="resetProgress()" style="background: rgba(0,0,0,0.35); color: white; border: 2px solid rgba(255,255,255,0.25); padding: 0.6rem 1.4rem; border-radius: 2rem; cursor: pointer; font-size: 0.85rem; font-weight: 700; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 0.6rem; width: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                <span>🔄</span> Reset My Progress
+                <span>🔄</span> <span data-i18n="reset_progress">Reset My Progress</span>
             </button>
         </div>
     </div>
@@ -34,57 +35,57 @@
     <div class="card-grid">
         <div class="card">
             <span class="card-icon">🎮</span>
-            <h2>Play Now</h2>
-            <p class="text-muted mb-2">Jump right into the banana-catching fun!</p>
-            <a href="game.html" class="btn">Start Playing ⚡</a>
+            <h2 data-i18n="play_now_title">Play Now</h2>
+            <p class="text-muted mb-2" data-i18n="play_now_desc">Jump right into the banana-catching fun!</p>
+            <a href="game.html" class="btn" data-i18n="play_now">Start Playing ⚡</a>
         </div>
 
         <div class="card">
             <span class="card-icon">🏆</span>
-            <h2>Leaderboard</h2>
-            <p class="text-muted mb-2">See who's the ultimate banana champion!</p>
-            <a href="leaderboard.html" class="btn">View Rankings 👑</a>
+            <h2 data-i18n="leaderboard_title">Leaderboard</h2>
+            <p class="text-muted mb-2" data-i18n="leaderboard_desc">See who's the ultimate banana champion!</p>
+            <a href="leaderboard.html" class="btn" data-i18n="leaderboard">View Rankings 👑</a>
         </div>
 
         <div class="card">
             <span class="card-icon">👤</span>
-            <h2>My Profile</h2>
-            <p class="text-muted mb-2">Check your stats and achievements!</p>
-            <a href="profile.html" class="btn">View Profile 📊</a>
+            <h2 data-i18n="profile_title">My Profile</h2>
+            <p class="text-muted mb-2" data-i18n="profile_desc">Check your stats and achievements!</p>
+            <a href="profile.html" class="btn" data-i18n="profile">View Profile 📊</a>
         </div>
 
         <div class="card">
             <span class="card-icon">🚪</span>
-            <h2>Logout</h2>
-            <p class="text-muted mb-2">Done for now? See you back soon!</p>
-            <button id="logoutBtn" class="btn">Logout 👋</button>
+            <h2 data-i18n="logout_title">Logout</h2>
+            <p class="text-muted mb-2" data-i18n="logout_desc">Done for now? See you back soon!</p>
+            <button id="logoutBtn" class="btn" data-i18n="logout">Logout 👋</button>
         </div>
     </div>
 
     <div class="card mt-4" style="width: 100%; max-width: 1100px; text-align: center; background: linear-gradient(to bottom, #fef9c3, #fde047); border: none; padding: 2.5rem 1rem; border-radius: 2.5rem; box-shadow: 0 15px 35px rgba(0,0,0,0.05);">
-        <h1 style="font-size: 3rem; color: #854d0e; text-shadow: 0 4px 8px rgba(0,0,0,0.05); margin-bottom: 0.25rem; font-weight: 950; letter-spacing: -1px;">SELECT LEVEL</h1>
-        <p style="font-weight: 900; color: #713f12; font-size: 1.1rem; margin-bottom: 3rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;">YOUR ADVENTURE AWAITS! 🚀</p>
+        <h1 style="font-size: 3rem; color: #854d0e; text-shadow: 0 4px 8px rgba(0,0,0,0.05); margin-bottom: 0.25rem; font-weight: 950; letter-spacing: -1px;" data-i18n="select_level">SELECT LEVEL</h1>
+        <p style="font-weight: 900; color: #713f12; font-size: 1.1rem; margin-bottom: 3rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8;" data-i18n="adventure_awaits">YOUR ADVENTURE AWAITS! 🚀</p>
         <div id="levelSelectionGrid">
             <!-- Gem cards injected here -->
         </div>
     </div>
 
     <div class="card mt-4" style="width: 100%; max-width: 1100px; text-align: left; align-items: start;">
-        <h2>How to Play</h2>
+        <h2 data-i18n="how_to_play">How to Play</h2>
         <div class="card-grid" style="margin-top: 1rem; grid-template-columns: repeat(3, 1fr);">
             <div style="text-align: center;">
                 <h3 style="color: var(--primary-orange);">1</h3>
-                <p>Choose your difficulty level</p>
+                <p data-i18n="step1">Choose your difficulty level</p>
                 <span style="font-size: 1.5rem;">🌴</span>
             </div>
             <div style="text-align: center;">
                 <h3 style="color: var(--primary-orange);">2</h3>
-                <p>Catch falling bananas</p>
+                <p data-i18n="step2">Catch falling bananas</p>
                 <span style="font-size: 1.5rem;">🍌</span>
             </div>
             <div style="text-align: center;">
                 <h3 style="color: var(--primary-orange);">3</h3>
-                <p>Avoid obstacles</p>
+                <p data-i18n="step3">Avoid obstacles</p>
                 <span style="font-size: 1.5rem;">💥</span>
             </div>
         </div>
@@ -92,14 +93,16 @@
 
     <script src="js/api.js"></script>
     <script src="js/theme.js"></script>
+    <script src="js/i18n.js"></script>
     <script>
         // Fetch and display user data
         fetchProfile().then(res => {
             if (res.status === "success") {
-                const user = res.data;
-                const highestLevel = user.highest_level || 1;
-                document.getElementById('welcomeUser').textContent = `Hello ${user.username}! Ready to play Level ${highestLevel}? 🐒`;
-                document.getElementById('diamondCount').innerText = user.diamonds;
+                const data = res.data;
+                const highestLevel = data.highest_level || 1;
+                const welcomeMsg = i18n.t('hero_subtitle_user').replace('%username%', data.username);
+                document.getElementById('welcomeUser').textContent = welcomeMsg;
+                document.getElementById('diamondCount').innerText = data.diamonds || 0;
                 
                 // Update Play Button to start from highest level
                 const playBtn = document.querySelector('a[href="game.html"]');
@@ -118,9 +121,9 @@
 
         async function resetProgress() {
             if (confirm("Reset all progress back to Level 1?")) {
-                const res = await fetch('backend/api/debug_reset.php');
-                const data = await res.json();
+                const data = await resetProgressData();
                 if (data.status === 'success') {
+                    localStorage.removeItem('level1_done');
                     location.reload();
                 } else {
                     alert("Reset failed: " + data.message);
@@ -152,16 +155,17 @@
 
                 if (lvl.id < highestLevel) {
                     status = 'completed';
-                    label = 'Finished';
+                    label = i18n.currentLang === 'en' ? 'Finished' : 'முடிந்தது';
                     icon = '<div class="lvl-icon">✅</div>';
                     // Allow replaying finished levels
                     action = `onclick="window.location.href='game.html?level=${lvl.id}'"`;
                 } else if (lvl.id == highestLevel) {
                     status = 'current';
-                    label = 'Play Now';
+                    label = i18n.currentLang === 'en' ? 'Play Now' : 'விளையாடு';
                     action = `onclick="window.location.href='game.html?level=${lvl.id}'"`;
                 } else {
                     icon = '<div class="lvl-icon">🔒</div>';
+                    label = i18n.currentLang === 'en' ? 'Locked' : 'பூட்டப்பட்டது';
                 }
 
                 return `

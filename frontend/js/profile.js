@@ -33,7 +33,8 @@ function fetchProfileData() {
 
 function renderProfile(data) {
     // Update Header
-    document.getElementById('profileUsername').textContent = `${data.username}'s Profile`;
+    const profileTitle = i18n.currentLang === 'en' ? `${data.username}'s Profile` : `${data.username}-இன் சுயவிவரம்`;
+    document.getElementById('profileUsername').textContent = profileTitle;
     document.getElementById('diamondCount').innerText = data.diamonds || 0;
 
     if (data.profile_pic) {
@@ -52,11 +53,11 @@ function renderProfile(data) {
     historyBody.innerHTML = '';
 
     if (data.recent_games.length === 0) {
-        historyBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No games recorded yet</td></tr>';
+        historyBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">${i18n.t('no_games')}</td></tr>`;
     } else {
         data.recent_games.forEach(game => {
             const row = document.createElement('tr');
-            const date = new Date(game.created_at).toLocaleDateString();
+            const date = new Date(game.created_at).toLocaleDateString(i18n.currentLang === 'ta' ? 'ta-IN' : 'en-US');
             row.innerHTML = `
                 <td>${date}</td>
                 <td>${game.score}</td>
@@ -66,6 +67,9 @@ function renderProfile(data) {
             historyBody.appendChild(row);
         });
     }
+
+    // Call updateUI to translate any static elements that were missed
+    i18n.updateUI();
 
     // Render Achievements
     const achContainer = document.getElementById('achievementsContainer');

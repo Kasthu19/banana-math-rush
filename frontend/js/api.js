@@ -63,3 +63,8 @@ function fetchProfile() {
     return fetch(API_BASE + "profile_stats.php", { credentials: 'include' })
         .then(res => res.json());
 }
+
+function resetProgressData() {
+    return fetch(API_BASE + "debug_reset.php", { credentials: 'include' })
+        .then(res => res.json());
+}

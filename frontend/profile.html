@@ -16,8 +16,9 @@
     </div>
 
     <div class="hero">
+        <button id="languageToggle" class="btn-lang" onclick="i18n.toggle()">தமிழ்</button>
         <button id="themeToggle" class="btn-theme" title="Toggle Dark Mode">🌓</button>
-        <div class="diamond-hud" style="position: absolute; top: 1rem; right: 4rem;">
+        <div class="diamond-hud" style="position: absolute; top: 1rem; right: 8rem;">
             <span class="icon">💎</span>
             <span id="diamondCount">0</span>
         </div>
@@ -27,45 +28,45 @@
         </div>
 
         <h1 id="profileUsername">Athlete's Profile</h1>
-        <p>Your journey and milestones so far 🌟</p>
-        <a href="index.html" class="btn-outline">Back to Home 🏠</a>
+        <p data-i18n="journey_milestones">Your journey and milestones so far 🌟</p>
+        <a href="index.html" class="btn-outline" data-i18n="back_home">Back to Home 🏠</a>
     </div>
 
     <div class="card-grid" id="statsGrid">
         <div class="card">
             <span class="card-icon">🎮</span>
             <h3 id="statTotalGames">0</h3>
-            <p>Games Played</p>
+            <p data-i18n="stat_games">Games Played</p>
         </div>
         <div class="card">
             <span class="card-icon">🥇</span>
             <h3 id="statHighScore">0</h3>
-            <p>High Score</p>
+            <p data-i18n="stat_highscore">High Score</p>
         </div>
         <div class="card">
             <span class="card-icon">⚡</span>
             <h3 id="statAvgSpeed">0s</h3>
-            <p>Avg Speed</p>
+            <p data-i18n="stat_speed">Avg Speed</p>
         </div>
         <div class="card">
             <span class="card-icon">🌠</span>
             <h3 id="statMaxLevel">0</h3>
-            <p>Max Level</p>
+            <p data-i18n="stat_maxlevel">Max Level</p>
         </div>
     </div>
 
     <div class="card-grid mt-4" style="grid-template-columns: 2fr 1fr;">
         <!-- Recent History -->
         <div class="card" style="text-align: left; align-items: start;">
-            <h2>Recent Match History</h2>
+            <h2 data-i18n="match_history">Recent Match History</h2>
             <div style="width: 100%; overflow-x: auto;">
                 <table class="leaderboard-table" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Score</th>
-                            <th>Level</th>
-                            <th>Avg Time</th>
+                            <th data-i18n="date">Date</th>
+                            <th data-i18n="score">Score</th>
+                            <th data-i18n="level">Level</th>
+                            <th data-i18n="avg_time">Avg Time</th>
                         </tr>
                     </thead>
                     <tbody id="recentHistoryBody">
@@ -77,16 +78,17 @@
 
         <!-- Achievements -->
         <div class="card" style="text-align: left; align-items: start;">
-            <h2>Achievements 🏆</h2>
+            <h2 data-i18n="achievements">Achievements 🏆</h2>
             <div id="achievementsContainer" class="badge-container">
                 <!-- Badges will be added here -->
-                <p id="noAchievementsMsg" class="text-muted">No achievements yet. Keep playing!</p>
+                <p id="noAchievementsMsg" class="text-muted" data-i18n="no_achievements">No achievements yet. Keep playing!</p>
             </div>
         </div>
     </div>
 
     <script src="js/api.js"></script>
     <script src="js/theme.js"></script>
+    <script src="js/i18n.js"></script>
     <script src="js/profile.js"></script>
     <script>
         document.getElementById('themeToggle')?.addEventListener('click', () => {

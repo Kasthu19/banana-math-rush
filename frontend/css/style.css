@@ -260,28 +260,55 @@ nav a.active {
     top: 1.5rem;
     right: 1.5rem;
     background: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    padding: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--text-dark);
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    cursor: pointer;
-    transition: var(--transition);
-    line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 45px;
-    height: 45px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: var(--transition);
+    z-index: 1000;
+    font-size: 1.2rem;
 }
 
-.btn-theme:hover {
-    background: rgba(255, 255, 255, 0.3);
-    transform: rotate(30deg);
+/* Language Toggle Positioned next to Theme Toggle */
+.btn-lang {
+    position: absolute;
+    top: 1.5rem;
+    right: 4.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--text-dark);
+    padding: 0 0.75rem;
+    height: 40px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: var(--transition);
+    z-index: 1000;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: var(--text-dark);
 }
 
-[data-theme='dark'] .btn-theme {
-    background: rgba(0, 0, 0, 0.2);
+[data-theme='dark'] .btn-theme,
+[data-theme='dark'] .btn-lang {
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+}
+
+.btn-theme:hover,
+.btn-lang:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.4);
 }
 
 /* Utilities */

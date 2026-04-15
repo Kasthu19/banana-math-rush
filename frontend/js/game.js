@@ -98,7 +98,7 @@ function resetTimer() {
     let timerValue = 60;
 
     // Highest reached logic
-    if (score >= 35 || currentActiveLevel >= 5) { timerValue = 12; level = "Elite 🏆"; }
+    if (score >= 35 || currentActiveLevel >= 5) { timerValue = 12; level = `${i18n.t('mode_elite')} 🏆`; }
     else if (score >= 20 || currentActiveLevel >= 4) { timerValue = 25; level = 4; }
     else if (score >= 10 || currentActiveLevel >= 3) { timerValue = 35; level = 3; }
     else if (score >= 5 || currentActiveLevel >= 2) { timerValue = 45; level = 2; }
@@ -161,7 +161,7 @@ function handleTimeUp() {
         endGame();
     } else {
         SoundEffects.wrong();
-        showWrongFeedback("Time's up!");
+        showWrongFeedback(i18n.t('time_up'));
         loadPuzzle();
     }
 }
@@ -234,7 +234,7 @@ function checkAnswer() {
             endGame();
         } else {
             SoundEffects.wrong();
-            showWrongFeedback("Wrong Answer!");
+            showWrongFeedback(i18n.t('wrong_answer'));
         }
     }
 }
@@ -468,7 +468,7 @@ function showLevelUpFeedback(level) {
     giftBox.onclick = () => {
         giftBox.innerText = "✨";
         giftBox.classList.add("open");
-        msg.innerText = "Reward Collected! 💎";
+        msg.innerText = i18n.t('reward_collected');
 
         // Level Reward Claim
         const proceedToNextLevel = () => {
@@ -526,7 +526,7 @@ function showLevel1Complete() {
 
     giftBox.onclick = () => {
         giftBox.innerText = "✨";
-        msg.innerText = "Level 1 Reward Claimed! 💎";
+        msg.innerText = i18n.t('lv1_reward_claimed');
 
         claimReward(null, true).then(res => {
             if (res.status === "success") {
@@ -547,7 +547,7 @@ function showLevel1Complete() {
                     giftBox.style.display = "none";
                     msg.style.display = "none";
                     nextBtn.style.display = "inline-block";
-                    nextBtn.innerText = "Start Level 2 🚀";
+                    nextBtn.innerText = i18n.t('start_level_2');
                     nextBtn.onclick = () => window.location.href = 'game.html?level=2';
                     localStorage.setItem('level1_done', 'true');
                 }, 1500);
